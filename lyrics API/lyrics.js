@@ -26,7 +26,7 @@ function getLyrics(){
             let album = row.children[2].textContent;
             //${song}${artist}${album}
             
-            let url = `http://api.musixmatch.com/ws/1.1/tracking.url.get?apikey=cb1a9fa1ee061d28c825353a2d43c7c2&format=json`;
+            let url = `http://api.musixmatch.com/ws/1.1/track.search?apikey=cb1a9fa1ee061d28c825353a2d43c7c2&format=json&q_artist=${artist}&`;
             
             fetch(url)
             .then((response)=> {
