@@ -1,3 +1,0 @@
-cb1a9fa1ee061d28c825353a2d43c7c2
-
-Root URL:  http://api.musixmatch.com/ws/1.1/
