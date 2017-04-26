@@ -22,7 +22,7 @@ function newListItem(item){
     return item;
 }
 
-function findResult(e){
+function findResult(){
             
     let searchType;
     let inputValue = "";
@@ -61,13 +61,19 @@ function findResult(e){
                 
                 let item = document.createElement("li");
                 item.class="list";
+                
                 title = tracks[i].name;
                 artist = tracks[i].artists[0].name;
                 album = tracks[i].album.name;
                 
+                if(tracks[i].album.images.length !== 0){
+                    cover = tracks[i].album.images[0].url;    
+                }
+                
                 
                item.innerHTML = `<div class="table listItem">
                                     <div class="tableRow listItem">
+                                        <img class="listItem cover" src=${cover} 
                                         <div class="tableCell song listItem">${title}</div>
                                         <div class="tableCell artist listItem">${artist}</div>
                                         <div class="tableCell album listItem">${album}</div>
