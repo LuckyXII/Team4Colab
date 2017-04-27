@@ -18,12 +18,11 @@ li{
 
 .table{
     display: table;
- 
+    width: 100%;
 }
 
 .tableRow{
     display: table-row;
- 
 }
 
 .tableCell{
@@ -107,47 +106,4 @@ h1{
     height: 1.3vw;
     margin: 5px;
     padding-left: 25px;
-}
-
-#artistBio{
-    display: none;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -ms-flex-direction: row;
-    flex-direction: row;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    position: absolute;
-    left: 73vw;
-    top: 37vh;
-    width: 20vw;
-    height: 25vw;
-    border-radius: 10px;
-    border: 1px solid white;
-    text-align: center;
-    color: #514359;
-    background-color: white;
-    
-}
-
-#bioCover{
-    margin: 20px;
-    width: auto;
-    height: 5vw;
-    border-radius: 100%;
-    -ms-flex-preferred-size: 50%;
-    flex-basis: 30%;
-}
-
-#bioTitle{
-    -ms-flex-preferred-size: 100%;
-    flex-basis: 30%;
-    margin-top: 3vw;
-}
-
-#bioInfo{
-    font-size: 1.2em;
 }
