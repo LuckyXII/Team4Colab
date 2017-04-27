@@ -1,18 +1,51 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-    <head>
-        <title>Team4 Collaboration</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://fonts.googleapis.com/css?family=Monoton" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="style/style.css">
-    </head>
-    <body>
-        <img id="teaser" src="rescources/teaser.png" alt="background teaser">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+<div class="container">
+    <header class="header">
+        <img src="./rescources/logo.png" alt="MusicSearch" class="logo">
+        <div class="log-in-container" style="display: none">
+            <button type="button" class="btn">Log in</button>
+        </div>
+        <!-- Boxen som visas när man är inloggad -->
+        <div class="log-in-container">
+            <div class="user-box">
+                <img src="http://placehold.it/50x50" alt="" class="profile-picture">
+                <h4>Robert Åhlund</h4>
+                <hr class="divider">
+                <span class="favorites"><i class="material-icons">favorite_border</i>Favorites</span>
+                <span class="log-out">Log out</span>
+            </div>
+        </div>
+        <!-- ------------------------------- -->
+    </header>
+    <div class="search-container">
+        <h1>Search for music</h1>
+        <form class="radio">
+            <input type="radio" name="type" value="track" id="track" class="radio-btn" checked>
+            <label for="track" class="radio-label">Track</label>
+            <input type="radio" name="type" value="album" id="album" class="radio-btn">
+            <label for="album" class="radio-label">Album</label>
+            <input type="radio" name="type" value="artist" id="artist" class="radio-btn">
+            <label for="artist" class="radio-label">Artist</label>
+        </form>
+        <input type="text" id="main-search" placeholder="Search">
+        <button type="button" class="btn">Search</button>
+    </div>
+    <div class="search-results">
         
-        <a href="spotifyAPI/spotify.html"><h1>GET A SNEAK PEAK</h1></a>
-
-       
-        <script src="index.js"></script>
-    </body>
+    </div>
+</div>
+<script src="index.js"></script>
+</body>
 </html>

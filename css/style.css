@@ -1,0 +1,150 @@
+body {
+    background: #382e3d;
+    margin: 20px;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+    color: #FEFEFD;
+    font-weight: 500;
+}
+
+.logo {
+    width: 207px;
+    height: 30px;
+    margin: 5px 0 0 0;
+    float: left;
+}
+
+.log-in-container {
+    float: right;
+}
+
+.btn {
+    background: linear-gradient(to bottom, #ee495e 1%, #f27b38 100%);
+    height: 40px;
+    width: 170px;
+    border: none;
+    border-radius: 25px;
+    color: #FEFEFD;
+    text-transform: uppercase;
+    font-size: .8em;
+    outline: none;
+    cursor: pointer;
+}
+
+#main-search {
+    width: 350px;
+    height: 40px;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 25px;
+    padding: 0 0 0 20px;
+    font-size: .9em;
+    margin: 0 15px 0 0;
+    outline: none;
+    color: #996A8E;
+}
+
+::-webkit-input-placeholder {
+    color: #996A8E;
+}
+
+label {
+    margin-right: 5px;
+    margin-left: 10px;
+    margin-bottom: 15px;
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+    font-weight: 300;
+    color: #FEFEFD;
+}
+
+input:checked + label {
+    color: #f2793a;
+}
+
+input[type=radio] {
+    display: none;
+}
+
+.radio-label:before {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 7px;
+    margin-top: -3px;
+    vertical-align: middle;
+    bottom: 1px;
+    background-color: #f2793a;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.radio label:before {
+    border-radius: 8px;
+}
+
+input[type=radio]:checked + label:before {
+    content: "\2022";
+    color: #382e3d;
+    font-size: 30px;
+    text-align: center;
+    line-height: 18px;
+}
+
+.search-container {
+    text-align: center;
+    clear: both;
+    padding: 25vh 0 0 0;
+}
+
+/*
+USER-BOX
+ */
+
+.user-box {
+    background: #F7F7F8;
+    color: #996A8E;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.profile-picture {
+    height: 50px;
+    width: 50px;
+    border-radius: 25px;
+    float: left;
+    margin: 0 15px 15px 0;
+}
+
+.user-box > h4 {
+    float: right;
+    margin: 17px 0 0 0;
+}
+
+.user-box > .divider {
+    clear: both;
+    border: 0;
+    height: 1px;
+    background: #996A8E;
+    margin: 0 0 15px 0;
+}
+
+.favorites {
+    font-size: 16px;
+}
+
+.favorites > i {
+    font-size: 24px;
+    vertical-align: middle;
+    padding: 0 8px 3px 0;
+}
+
+.log-out {
+    display: block;
+    margin: 20px 0 0 0;
+    text-align: right;
+}
