@@ -143,10 +143,17 @@ USER-BOX
 .user-box > h4 {
     float: left;
     margin: 17px 0 0 0;
+    font-weight: 400;
 }
 
 .user-box > h3 {
     text-align: center;
+    font-weight: 400;
+}
+
+.user-box > i {
+    float: right;
+    cursor: pointer;
 }
 
 .user-box > .favorite-search-wrap > input {
@@ -288,7 +295,17 @@ li > span:last-child {
 .active {
     background: #3C3242;
     padding: 5px 5px 5px 5px;
-    border-radius: 5px;
+    border-bottom: none;
+}
+
+.active td:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.active td:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
 }
 
 li {
@@ -307,4 +324,42 @@ li {
     .bio {
         order: 3;
     }
+}
+
+/*
+TABLE-TEST
+ */
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th {
+    font-weight: 500;
+}
+
+td, th {
+    text-align: left;
+    padding: 8px;
+}
+
+tr {
+    border-bottom: 1px solid #996A8E;
+}
+
+tr:first-child, tr:last-child {
+    border-bottom: none;
+}
+
+td > i {
+    font-size: 24px;
+    vertical-align: middle;
+    padding: 0 8px 3px 0;
+}
+
+th > i {
+    font-size: 24px;
+    vertical-align: middle;
+    padding: 0 8px 3px 0;
 }
