@@ -1,6 +1,6 @@
 body {
     background: #382e3d;
-    margin: 20px;
+    margin: 20px 0 0 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
 }
@@ -8,6 +8,11 @@ body {
 h1 {
     color: #FEFEFD;
     font-weight: 500;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
 }
 
 .logo {
@@ -98,7 +103,7 @@ input[type=radio]:checked + label:before {
 .search-container {
     text-align: center;
     clear: both;
-    padding: 25vh 0 0 0;
+    padding: 20vh 0 0 0;
 }
 
 /*
@@ -125,6 +130,13 @@ USER-BOX
     margin: 17px 0 0 0;
 }
 
+.divider {
+    border: 0;
+    height: 1px;
+    background: #996A8E;
+    margin: 5px 0 15px 0;
+}
+
 .user-box > .divider {
     clear: both;
     border: 0;
@@ -147,4 +159,83 @@ USER-BOX
     display: block;
     margin: 20px 0 0 0;
     text-align: right;
+}
+
+/*
+RESULT-BOX + LYRICS + BIO
+ */
+
+.results-container {
+    padding-top: 50px;
+}
+.lyrics {
+    background: #F7F7F8;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 20px 0 0 0;
+    color: #996A8E;
+}
+
+.lyrics > h3, h5 {
+    text-align: center;
+    font-weight: 500;
+}
+
+.lyrics > p {
+    font-size: .9em;
+}
+
+.search-results {
+    background: #F7F7F8;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 20px 0 0 0;
+    color: #996A8E;
+}
+
+.search-results > ul > .sort {
+    display: inline-block;
+}
+
+.biography {
+    background: #F7F7F8;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 20px 0 0 0;
+    color: #996A8E;
+}
+
+.biography > h3, h5 {
+    text-align: center;
+    font-weight: 500;
+}
+
+.biography > p {
+    font-size: .9em;
+}
+
+li > span {
+    padding-right: 25px;
+}
+
+li > span:last-child {
+    padding-right: 0;
+}
+
+.sort {
+    padding-right: 25px;
+}
+
+@media only screen and (max-width: 64em) {
+    .lyric {
+        order: 2;
+    }
+
+    .search {
+        order: 1;
+    }
+
+    .bio {
+        order: 3;
+    }
 }

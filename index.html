@@ -8,6 +8,8 @@
     <title>Document</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css"
+          type="text/css">
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
@@ -27,7 +29,7 @@
                 <span class="log-out">Log out</span>
             </div>
         </div>
-        <!-- ------------------------------- -->
+        <!----------------------------------->
     </header>
     <div class="search-container">
         <h1>Search for music</h1>
@@ -42,9 +44,66 @@
         <input type="text" id="main-search" placeholder="Search">
         <button type="button" class="btn">Search</button>
     </div>
-    <div class="search-results">
-        
+    <!-- Boxen som visas när man har sökt -->
+    <div class="results-container">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-xs-6 lyric">
+                <div class="lyrics">
+                    <h3>Lyrics</h3>
+                    <h5>Låtnamn - Artist</h5>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                        labore
+                        et dolore magna aliqua.
+                        <br><br>
+                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                        consequat.
+                        <br><br>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                        labore
+                        et dolore magna aliqua.
+                        <br><br>
+                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                        consequat.</p>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-xs-12 search">
+                <div class="search-results">
+                    <ul>
+                        <li class="sort">Track</li>
+                        <li class="sort">Artist</li>
+                        <li class="sort">Album</li>
+                    </ul>
+                    <ul>
+                        <li><span class="track">Låtnamn</span><span class="artist">Artist</span><span class="album">Album</span><span class="youtube">Watch on YouTube</span><span class="Lyrics">Lyrics</span><span class="favorites"><i class="material-icons">favorite_border</i></span> </li>
+                        <hr class="divider">
+                        <li><span class="track">Låtnamn</span><span class="artist">Artist</span><span class="album">Album</span><span class="youtube">Watch on YouTube</span><span class="Lyrics">Lyrics</span><span class="favorites"><i class="material-icons">favorite_border</i></span> </li>
+                        <hr class="divider">
+                        <li><span class="track">Låtnamn</span><span class="artist">Artist</span><span class="album">Album</span><span class="youtube">Watch on YouTube</span><span class="Lyrics">Lyrics</span><span class="favorites"><i class="material-icons">favorite_border</i></span> </li>
+                        <hr class="divider">
+                        <li><span class="track">Låtnamn</span><span class="artist">Artist</span><span class="album">Album</span><span class="youtube">Watch on YouTube</span><span class="Lyrics">Lyrics</span><span class="favorites"><i class="material-icons">favorite_border</i></span> </li>
+                        <hr class="divider">
+                        <li><span class="track">Låtnamn</span><span class="artist">Artist</span><span class="album">Album</span><span class="youtube">Watch on YouTube</span><span class="Lyrics">Lyrics</span><span class="favorites"><i class="material-icons">favorite_border</i></span> </li>
+                        <hr class="divider">
+                        <li><span class="track">Låtnamn</span><span class="artist">Artist</span><span class="album">Album</span><span class="youtube">Watch on YouTube</span><span class="Lyrics">Lyrics</span><span class="favorites"><i class="material-icons">favorite_border</i></span> </li>
+                        <hr class="divider">
+                        <li><span class="track">Låtnamn</span><span class="artist">Artist</span><span class="album">Album</span><span class="youtube">Watch on YouTube</span><span class="Lyrics">Lyrics</span><span class="favorites"><i class="material-icons">favorite_border</i></span> </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-xs-6 bio">
+                <div class="biography">
+                    <h3>Artist</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                        labore
+                        et dolore magna aliqua.
+                        <br><br>
+                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                        consequat.</p>
+                </div>
+            </div>
+        </div>
     </div>
+    <!----------------------------------->
 </div>
 <script src="index.js"></script>
 </body>
