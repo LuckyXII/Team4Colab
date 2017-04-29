@@ -106,6 +106,21 @@ input[type=radio]:checked + label:before {
     padding: 20vh 0 0 0;
 }
 
+.search-field-container {
+    position: relative;
+    width: 350px;
+    margin: 0 auto 0 auto;
+}
+
+.search-field-container > i {
+    position: absolute;
+    top: 9px;
+    right: 20px;
+    font-size: 22px;
+    color: #996A8E;
+    cursor: pointer;
+}
+
 /*
 USER-BOX
  */
@@ -126,8 +141,39 @@ USER-BOX
 }
 
 .user-box > h4 {
-    float: right;
+    float: left;
     margin: 17px 0 0 0;
+}
+
+.user-box > h3 {
+    text-align: center;
+}
+
+.user-box > .favorite-search-wrap > input {
+    height: 30px;
+    width: 220px;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 13px;
+    padding: 0 0 0 15px;
+    font-size: .9em;
+    margin: 0 15px 0 0;
+    outline: none;
+    color: #996A8E;
+}
+
+.favorite-search-wrap {
+    position: relative;
+    width: 220px;
+    margin: 10px auto 30px auto;
+}
+
+.user-box > .favorite-search-wrap > i {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    font-size: 18px;
+    cursor: pointer;
 }
 
 .divider {
