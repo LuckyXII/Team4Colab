@@ -215,12 +215,39 @@ USER-BOX
 }
 
 /*
+SUGGESTIONS
+ */
+
+.suggestions {
+    background: #F7F7F8;
+    width: 80%;
+    margin: 15px auto 0 auto;
+    border-radius: 5px;
+    padding: 5px 20px 5px 20px;
+    text-align: left;
+}
+
+.suggestions > ul > li {
+    padding: 10px 0 10px 0;
+    border-bottom: 1px solid #996A8E;
+    color: #996A8E;
+    font-weight: 300;
+}
+
+.suggestions > ul > li:last-child {
+    border-bottom: none;
+}
+
+}
+
+/*
 RESULT-BOX + LYRICS + BIO
  */
 
 .results-container {
     padding-top: 50px;
 }
+
 .lyrics {
     background: #F7F7F8;
     border-radius: 5px;
