@@ -8,9 +8,14 @@ var searchBtn = document.getElementById("searchBtn");
 var list = document.getElementById("list");
 var radioBtns = document.getElementsByClassName("radio");
 var input = document.getElementById("searchInput");
+var artistBio = document.getElementById("artistBio");
+
 
 //=======================================================
 //MAIN
+
+
+
 
 //=======================================================
 //CALLBACKS
@@ -18,12 +23,67 @@ searchBtn.addEventListener("click", findResult);
 //=======================================================
 //FUNCTIONS
 
-function newListItem(item){
-    return item;
+function getArtistBio(e){
+    
+    
+    
+    let elm;
+    if(e.target !== this){
+        
+        if(e.target.class === "table listItem"){
+            elm = e.target.parentNode;
+        }
+        else if(e.target.class === "tableRow listItem"){
+            elm = e.target.parentNode.parentNode;
+        }else{
+            elm = e.target.parentNode.parentNode.parentNode;
+        }
+        
+    }else{
+        elm = e.target.children[0];
+    }
+    
+    
+    let artist = elm.children[0].children[0].children[1].textContent;
+    let bioImg = document.getElementById("bioCover");
+    let bioInfo = document.getElementById("bioInfo");
+    let bioTitle = document.getElementById("bioTitle");
+    
+    let url = `http://ws.audioscrobbler.com/2.0/?api_key=b971e5066edbb8974e0bb47164fd33a4&method=artist.getinfo&artist=${artist}&format=json`;
+    
+    fetch(url)
+    .then((response)=> {
+    	return response.json();
+    })
+    .then((result)=> {
+    	console.log(result);
+        
+        let art = result.artist;
+        let bio = art.bio.summary;
+        let cover = art.image[0]["#text"];
+        let name = art.name;
+        let similar = art.similar.artist;
+        
+        let similarArtists ="";
+        for(let i = 0; i < similar.length; i++){
+            similarArtists+=similar[i].name;
+        }
+        
+        bioTitle.textContent = name;
+        bioImg.src = cover;
+        bioInfo.children[1].textContent = similarArtists;
+        bioInfo.children[3].innerHTML = bio;
+        
+    });
+    
+    artistBio.style.display = "flex";
+    
 }
 
 function findResult(){
-            
+    
+    list.textContent = "";
+    
     let searchType;
     let inputValue = "";
     let title = "";
@@ -50,8 +110,6 @@ function findResult(){
     })
     .then((result)=> {  // objekt
         console.log(result);
-        
-        
         
         if(searchType === "track"){
             
@@ -81,6 +139,9 @@ function findResult(){
                                 </div>`;
                 list.appendChild(item);
                 
+                
+                item.addEventListener("click",getArtistBio);
+                
             }
         }
         else if(searchType === "artist"){
@@ -105,7 +166,7 @@ function findResult(){
                                     </div>
                                 </div>`; 
                 list.appendChild(item);
-                
+                item.addEventListener("click",getArtistBio);
             }
             
             
@@ -134,6 +195,7 @@ function findResult(){
                                 </div>`; 
                 
                 list.appendChild(item);
+                item.addEventListener("click",getArtistBio);
             }
         }
         

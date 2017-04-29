@@ -1,0 +1,5 @@
+root url: http://ws.audioscrobbler.com/2.0/
+Application name	team4colab
+API key	b971e5066edbb8974e0bb47164fd33a4
+Shared secret	d1f1fec43d605140d91f9f3d89b21f97
+Registered to	team4colab
