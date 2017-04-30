@@ -17,8 +17,8 @@
 <div class="container-fluid">
     <header class="header">
         <img src="./rescources/logo.png" alt="MusicSearch" class="logo">
-        <div class="log-in-container" style="display: none">
-            <button type="button" class="btn">Log in</button>
+        <div class="log-in-container" id="container">
+            <button type="button" class="btn" id="log-in">Log in</button>
         </div>
         <!-- Boxen som visas när man är inloggad -->
         <div class="log-in-container" style="display: none">
@@ -27,12 +27,12 @@
                 <h4>Robert Åhlund</h4>
                 <hr class="divider">
                 <span class="favorites"><i class="material-icons">favorite_border</i>Favorites</span>
-                <span class="log-out">Log out</span>
+                <span class="log-out" id="log-out">Log out</span>
             </div>
         </div>
         <!----------------------------------->
         <!-- Favoriter -->
-        <div class="log-in-container">
+        <div class="log-in-container" style="display: none">
             <div class="user-box">
                 <img src="http://placehold.it/50x50" alt="" class="profile-picture">
                 <h4>Robert Åhlund</h4>
@@ -320,6 +320,19 @@
     </div>
     <!----------------------------------->
 </div>
+
+<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+<script>
+    let config = {
+        apiKey: "AIzaSyAPF8Xr5uB8QDCwdsbtGjRQA3KTeM93Bec",
+        authDomain: "team4colab.firebaseapp.com",
+        databaseURL: "https://team4colab.firebaseio.com",
+        projectId: "team4colab",
+        storageBucket: "team4colab.appspot.com",
+        messagingSenderId: "731132032189"
+    };
+    firebase.initializeApp(config);
+</script>
 <script src="index.js"></script>
 </body>
 </html>

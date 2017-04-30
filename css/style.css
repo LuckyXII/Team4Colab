@@ -37,6 +37,7 @@ ul {
     font-size: .8em;
     outline: none;
     cursor: pointer;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
 #main-search {
@@ -50,6 +51,7 @@ ul {
     margin: 0 15px 0 0;
     outline: none;
     color: #996A8E;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
 ::-webkit-input-placeholder {
@@ -85,7 +87,7 @@ input[type=radio] {
     vertical-align: middle;
     bottom: 1px;
     background-color: #f2793a;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
 .radio label:before {
@@ -130,6 +132,7 @@ USER-BOX
     color: #996A8E;
     padding: 20px;
     border-radius: 5px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
 .profile-picture {
@@ -138,6 +141,7 @@ USER-BOX
     border-radius: 25px;
     float: left;
     margin: 0 15px 15px 0;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
 .user-box > h4 {
@@ -225,6 +229,7 @@ SUGGESTIONS
     border-radius: 5px;
     padding: 5px 20px 5px 20px;
     text-align: left;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
 .suggestions > ul > li {
@@ -252,6 +257,7 @@ RESULT-BOX + LYRICS + BIO
     padding: 20px;
     margin: 20px 0 0 0;
     color: #996A8E;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
 .lyrics > h3, h5 {
@@ -269,6 +275,7 @@ RESULT-BOX + LYRICS + BIO
     padding: 20px;
     margin: 20px 0 0 0;
     color: #996A8E;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
 .search-results > ul > .sort {
@@ -281,6 +288,7 @@ RESULT-BOX + LYRICS + BIO
     padding: 20px;
     margin: 20px 0 0 0;
     color: #996A8E;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
 .biography > h3, h5 {
