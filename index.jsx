@@ -19,6 +19,7 @@ class App extends React.Component {
         };
 
         this.handleLogIn = this.handleLogIn.bind(this);
+        this.handleLogOut = this.handleLogOut.bind(this);
         this.handleFavorites = this.handleFavorites.bind(this);
         this.closeFavorites = this.closeFavorites.bind(this);
         this.findResults = this.findResults.bind(this);
@@ -42,18 +43,27 @@ class App extends React.Component {
         });
     }
 
+    handleLogOut() {
+        firebase.auth().signOut().then(() => {
+            console.log('Du är utloggad.');
+            this.setState({
+                loggedIn: false
+            })
+        }).catch(error => {
+            console.log(error);
+        });
+    }
+
     handleFavorites() {
         this.setState({
             headerAction: 'favorites'
         });
-        console.log('klick');
     }
-    
+
     closeFavorites() {
         this.setState({
             headerAction: ''
         });
-        console.log('klick');
     }
 
 
@@ -184,6 +194,7 @@ class App extends React.Component {
                 <Header
                     loginStatus={this.state.loggedIn}
                     handleLogIn={this.handleLogIn}
+                    handleLogOut={this.handleLogOut}
                     userName={this.state.user.name}
                     userPicture={this.state.user.photo}
                     handleFavorites={this.handleFavorites}
@@ -315,7 +326,7 @@ class Header extends React.Component {
                             <hr className="divider"/>
                             <span className="favorites" onClick={this.props.handleFavorites}><i
                                 className="material-icons">favorite_border</i>Favorites</span>
-                            <span className="log-out" id="log-out">Log out</span>
+                            <span className="log-out" id="log-out" onClick={this.props.handleLogOut}>Log out</span>
                         </div>
                     </div>
                     }
