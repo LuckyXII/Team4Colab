@@ -30,7 +30,6 @@ logInButton.addEventListener('click', () => {
     firebase.auth().signInWithPopup(provider).then(result => {
         let user = result.user;
         console.log(user);
-        console.log(userContainer);
         userContainer.innerHTML = `<div class="user-box">
                 <img src=${user.photoURL} alt="" class="profile-picture">
                 <h4>${user.displayName}</h4>
