@@ -148,6 +148,8 @@
         </div>
         <!----------------------------------->
     </header>
+    
+    <!-- SEARCH CONTAINER -->
     <div class="search-container">
         <h1>Search for music</h1>
         <form class="radio">
@@ -159,8 +161,10 @@
             <label for="artist" class="radio-label">Artist</label>
         </form>
         <div class="search-field-container">
+            
+            <!-- SEARCH INPUT -->
             <input type="text" id="main-search" placeholder="Search">
-            <i class="material-icons">search</i>
+            <i id="searchBtn" class="material-icons">search</i>
             <!--<button type="button" class="btn">Search</button>-->
             <div class="suggestions">
                 <ul>
@@ -196,7 +200,7 @@
                 </div>
             </div>
             <div class="col-lg-6 col-md-6 col-xs-12 search">
-                <div class="search-results">
+                <div id="searchResults" class="search-results">
                     <!--
                     <ul>
                         <li class="sort">Track</li>
@@ -234,13 +238,16 @@
                                 class="favorites"><i class="material-icons">favorite_border</i></span></li>
                     </ul>
                     -->
+                    
+                     
                     <div class="table-container">
-                        <table>
+                        <table id="resultTable">
                             <tr>
                                 <th>Track<i class="material-icons">arrow_drop_down</i></th>
                                 <th>Artist<i class="material-icons">arrow_drop_down</i></th>
                                 <th>Album<i class="material-icons">arrow_drop_down</i></th>
                             </tr>
+                            <!-- comment
                             <tr>
                                 <td>Låttitel</td>
                                 <td>Artist</td>
@@ -295,6 +302,7 @@
                                 <td>Lyrics</td>
                                 <td><i class="material-icons">favorite_border</i></td>
                             </tr>
+                        -->
                         </table>
                     </div>
                     <div class="quote">

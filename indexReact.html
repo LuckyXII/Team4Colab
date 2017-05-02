@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css"
+              type="text/css">
+        <link rel="stylesheet" href="./css/style.css">
+        <script src="https://unpkg.com/react@15/dist/react.js"></script>
+        <script src="https://unpkg.com/react-dom@15/dist/react-dom.js"></script>
+        <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    </head>
+    <body>
+        
+        <section id="App">Utan React</section>
+    
+        <!-- FIREBASE -->
+        <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+        <script>
+            let config = {
+                apiKey: "AIzaSyAPF8Xr5uB8QDCwdsbtGjRQA3KTeM93Bec",
+                authDomain: "team4colab.firebaseapp.com",
+                databaseURL: "https://team4colab.firebaseio.com",
+                projectId: "team4colab",
+                storageBucket: "team4colab.appspot.com",
+                messagingSenderId: "731132032189"
+            };
+            firebase.initializeApp(config);
+        </script>
+        <!-- REACT -->
+        <script type="text/jsx" src="index.jsx"></script>
+    </body>
+</html>
