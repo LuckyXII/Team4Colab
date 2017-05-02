@@ -8,26 +8,145 @@
     <title>Document</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css"
+          type="text/css">
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-<div class="container">
+
+<div class="container-fluid">
     <header class="header">
         <img src="./rescources/logo.png" alt="MusicSearch" class="logo">
-        <div class="log-in-container" style="display: none">
-            <button type="button" class="btn">Log in</button>
+        <div class="log-in-container" id="container">
+            <button type="button" class="btn" id="log-in">Log in</button>
         </div>
         <!-- Boxen som visas när man är inloggad -->
-        <div class="log-in-container">
+        <div class="log-in-container" style="display: none">
             <div class="user-box">
                 <img src="http://placehold.it/50x50" alt="" class="profile-picture">
                 <h4>Robert Åhlund</h4>
                 <hr class="divider">
                 <span class="favorites"><i class="material-icons">favorite_border</i>Favorites</span>
-                <span class="log-out">Log out</span>
+                <span class="log-out" id="log-out">Log out</span>
             </div>
         </div>
-        <!-- ------------------------------- -->
+        <!----------------------------------->
+        <!-- Favoriter -->
+        <div class="log-in-container" style="display: none">
+            <div class="user-box">
+                <img src="http://placehold.it/50x50" alt="" class="profile-picture">
+                <h4>Robert Åhlund</h4>
+                <i class="material-icons">close</i>
+                <hr class="divider">
+                <h3>Favorites</h3>
+                <div class="favorite-search-wrap">
+                    <input type="text" class="filter-favorites" placeholder="Search">
+                    <i class="material-icons">search</i>
+                </div>
+                <!--
+                <ul>
+                    <li class="active"><span class="track">Låtnamn</span><span class="artist">Artist</span><span
+                            class="album">Album</span><span class="youtube">Watch on YouTube</span><span
+                            class="Lyrics">Lyrics</span><span class="favorites"><i class="material-icons">favorite_border</i></span>
+                    </li>
+                    <hr class="divider">
+                    <li><span class="track">Låtnamn</span><span class="artist">Artist</span><span
+                            class="album">Album</span><span
+                            class="youtube">Watch on YouTube</span><span class="Lyrics">Lyrics</span><span
+                            class="favorites"><i class="material-icons">favorite_border</i></span></li>
+                    <hr class="divider">
+                    <li><span class="track">Låtnamn</span><span class="artist">Artist</span><span
+                            class="album">Album</span><span
+                            class="youtube">Watch on YouTube</span><span class="Lyrics">Lyrics</span><span
+                            class="favorites"><i class="material-icons">favorite_border</i></span></li>
+                    <hr class="divider">
+                    <li><span class="track">Låtnamn</span><span class="artist">Artist</span><span
+                            class="album">Album</span><span
+                            class="youtube">Watch on YouTube</span><span class="Lyrics">Lyrics</span><span
+                            class="favorites"><i class="material-icons">favorite_border</i></span></li>
+                    <hr class="divider">
+                    <li><span class="track">Låtnamn</span><span class="artist">Artist</span><span
+                            class="album">Album</span><span
+                            class="youtube">Watch on YouTube</span><span class="Lyrics">Lyrics</span><span
+                            class="favorites"><i class="material-icons">favorite_border</i></span></li>
+                    <hr class="divider">
+                    <li><span class="track">Låtnamn</span><span class="artist">Artist</span><span
+                            class="album">Album</span><span
+                            class="youtube">Watch on YouTube</span><span class="Lyrics">Lyrics</span><span
+                            class="favorites"><i class="material-icons">favorite_border</i></span></li>
+                    <hr class="divider">
+                    <li><span class="track">Låtnamn</span><span class="artist">Artist</span><span
+                            class="album">Album</span><span
+                            class="youtube">Watch on YouTube</span><span class="Lyrics">Lyrics</span><span
+                            class="favorites"><i class="material-icons">favorite_border</i></span></li>
+                </ul>
+                -->
+                <div class="table-container">
+                    <table>
+                        <tr>
+                            <th>Track<i class="material-icons">arrow_drop_down</i></th>
+                            <th>Artist<i class="material-icons">arrow_drop_down</i></th>
+                            <th>Album<i class="material-icons">arrow_drop_down</i></th>
+                        </tr>
+                        <tr class="active">
+                            <td>Låttitel</td>
+                            <td>Artist</td>
+                            <td>Album</td>
+                            <td>YouTube</td>
+                            <td>Spotify</td>
+                            <td>Lyrics</td>
+                            <td><i class="material-icons">favorite</i></td>
+                        </tr>
+                        <tr>
+                            <td>Låttitel</td>
+                            <td>Artist</td>
+                            <td>Album</td>
+                            <td>YouTube</td>
+                            <td>Spotify</td>
+                            <td>Lyrics</td>
+                            <td><i class="material-icons">favorite</i></td>
+                        </tr>
+                        <tr>
+                            <td>Låttitel</td>
+                            <td>Artist</td>
+                            <td>Album</td>
+                            <td>YouTube</td>
+                            <td>Spotify</td>
+                            <td>Lyrics</td>
+                            <td><i class="material-icons">favorite</i></td>
+                        </tr>
+                        <tr>
+                            <td>Låttitel</td>
+                            <td>Artist</td>
+                            <td>Album</td>
+                            <td>YouTube</td>
+                            <td>Spotify</td>
+                            <td>Lyrics</td>
+                            <td><i class="material-icons">favorite</i></td>
+                        </tr>
+                        <tr>
+                            <td>Låttitel</td>
+                            <td>Artist</td>
+                            <td>Album</td>
+                            <td>YouTube</td>
+                            <td>Spotify</td>
+                            <td>Lyrics</td>
+                            <td><i class="material-icons">favorite</i></td>
+                        </tr>
+                        <tr>
+                            <td>Låttitel</td>
+                            <td>Artist</td>
+                            <td>Album</td>
+                            <td>YouTube</td>
+                            <td>Spotify</td>
+                            <td>Lyrics</td>
+                            <td><i class="material-icons">favorite</i></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!----------------------------------->
     </header>
     <div class="search-container">
         <h1>Search for music</h1>
@@ -39,13 +158,181 @@
             <input type="radio" name="type" value="artist" id="artist" class="radio-btn">
             <label for="artist" class="radio-label">Artist</label>
         </form>
-        <input type="text" id="main-search" placeholder="Search">
-        <button type="button" class="btn">Search</button>
+        <div class="search-field-container">
+            <input type="text" id="main-search" placeholder="Search">
+            <i class="material-icons">search</i>
+            <!--<button type="button" class="btn">Search</button>-->
+            <div class="suggestions">
+                <ul>
+                    <li>Resultat 1</li>
+                    <li>Resultat 2</li>
+                    <li>Resultat 3</li>
+                    <li>Resultat 4</li>
+                    <li>Resultat 5</li>
+                </ul>
+            </div>
+        </div>
     </div>
-    <div class="search-results">
-        
+    <!-- Boxen som visas när man har sökt -->
+    <div class="results-container">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-xs-6 lyric">
+                <div class="lyrics">
+                    <h3>Lyrics</h3>
+                    <h5>Låtnamn - Artist</h5>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                        labore
+                        et dolore magna aliqua.
+                        <br><br>
+                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                        consequat.
+                        <br><br>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                        labore
+                        et dolore magna aliqua.
+                        <br><br>
+                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                        consequat.</p>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-xs-12 search">
+                <div class="search-results">
+                    <!--
+                    <ul>
+                        <li class="sort">Track</li>
+                        <li class="sort">Artist</li>
+                        <li class="sort">Album</li>
+                    </ul>
+                    <ul>
+                        <li class="active"><span class="track">Låtnamn</span><span class="artist">Artist</span><span
+                                class="album">Album</span><span class="youtube">Watch on YouTube</span><span
+                                class="Lyrics">Lyrics</span><span class="favorites"><i class="material-icons">favorite_border</i></span>
+                        </li>
+                        <hr class="divider">
+                        <li><span class="track">Låtnamn</span><span class="artist">Artist</span><span class="album">Album</span><span
+                                class="youtube">Watch on YouTube</span><span class="Lyrics">Lyrics</span><span
+                                class="favorites"><i class="material-icons">favorite_border</i></span></li>
+                        <hr class="divider">
+                        <li><span class="track">Låtnamn</span><span class="artist">Artist</span><span class="album">Album</span><span
+                                class="youtube">Watch on YouTube</span><span class="Lyrics">Lyrics</span><span
+                                class="favorites"><i class="material-icons">favorite_border</i></span></li>
+                        <hr class="divider">
+                        <li><span class="track">Låtnamn</span><span class="artist">Artist</span><span class="album">Album</span><span
+                                class="youtube">Watch on YouTube</span><span class="Lyrics">Lyrics</span><span
+                                class="favorites"><i class="material-icons">favorite_border</i></span></li>
+                        <hr class="divider">
+                        <li><span class="track">Låtnamn</span><span class="artist">Artist</span><span class="album">Album</span><span
+                                class="youtube">Watch on YouTube</span><span class="Lyrics">Lyrics</span><span
+                                class="favorites"><i class="material-icons">favorite_border</i></span></li>
+                        <hr class="divider">
+                        <li><span class="track">Låtnamn</span><span class="artist">Artist</span><span class="album">Album</span><span
+                                class="youtube">Watch on YouTube</span><span class="Lyrics">Lyrics</span><span
+                                class="favorites"><i class="material-icons">favorite_border</i></span></li>
+                        <hr class="divider">
+                        <li><span class="track">Låtnamn</span><span class="artist">Artist</span><span class="album">Album</span><span
+                                class="youtube">Watch on YouTube</span><span class="Lyrics">Lyrics</span><span
+                                class="favorites"><i class="material-icons">favorite_border</i></span></li>
+                    </ul>
+                    -->
+                    <div class="table-container">
+                        <table>
+                            <tr>
+                                <th>Track<i class="material-icons">arrow_drop_down</i></th>
+                                <th>Artist<i class="material-icons">arrow_drop_down</i></th>
+                                <th>Album<i class="material-icons">arrow_drop_down</i></th>
+                            </tr>
+                            <tr>
+                                <td>Låttitel</td>
+                                <td>Artist</td>
+                                <td>Album</td>
+                                <td>YouTube</td>
+                                <td>Spotify</td>
+                                <td>Lyrics</td>
+                                <td><i class="material-icons">favorite_border</i></td>
+                            </tr>
+                            <tr class="active">
+                                <td>Låttitel</td>
+                                <td>Artist</td>
+                                <td>Album</td>
+                                <td>YouTube</td>
+                                <td>Spotify</td>
+                                <td>Lyrics</td>
+                                <td><i class="material-icons">favorite_border</i></td>
+                            </tr>
+                            <tr>
+                                <td>Låttitel</td>
+                                <td>Artist</td>
+                                <td>Album</td>
+                                <td>YouTube</td>
+                                <td>Spotify</td>
+                                <td>Lyrics</td>
+                                <td><i class="material-icons">favorite_border</i></td>
+                            </tr>
+                            <tr>
+                                <td>Låttitel</td>
+                                <td>Artist</td>
+                                <td>Album</td>
+                                <td>YouTube</td>
+                                <td>Spotify</td>
+                                <td>Lyrics</td>
+                                <td><i class="material-icons">favorite_border</i></td>
+                            </tr>
+                            <tr>
+                                <td>Låttitel</td>
+                                <td>Artist</td>
+                                <td>Album</td>
+                                <td>YouTube</td>
+                                <td>Spotify</td>
+                                <td>Lyrics</td>
+                                <td><i class="material-icons">favorite_border</i></td>
+                            </tr>
+                            <tr>
+                                <td>Låttitel</td>
+                                <td>Artist</td>
+                                <td>Album</td>
+                                <td>YouTube</td>
+                                <td>Spotify</td>
+                                <td>Lyrics</td>
+                                <td><i class="material-icons">favorite_border</i></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="quote">
+                        <h3>Random quote from Artist</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                            labore et dolore magna aliqua.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-xs-6 bio">
+                <div class="biography">
+                    <h3>Artist</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                        labore
+                        et dolore magna aliqua.
+                        <br><br>
+                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                        consequat.</p>
+                    <img src="./rescources/lastfm_black_small.gif" alt="lastFM">
+                </div>
+            </div>
+        </div>
     </div>
+    <!----------------------------------->
 </div>
+
+<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+<script>
+    let config = {
+        apiKey: "AIzaSyAPF8Xr5uB8QDCwdsbtGjRQA3KTeM93Bec",
+        authDomain: "team4colab.firebaseapp.com",
+        databaseURL: "https://team4colab.firebaseio.com",
+        projectId: "team4colab",
+        storageBucket: "team4colab.appspot.com",
+        messagingSenderId: "731132032189"
+    };
+    firebase.initializeApp(config);
+</script>
 <script src="index.js"></script>
 </body>
 </html>
