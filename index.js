@@ -1,7 +1,24 @@
-let provider = new firebase.auth.GithubAuthProvider();
+/*jshint esnext: true, moz: true*/
+/*jslint browser:true */
+/*global firebase */
 
+//=======================================================
+//GLOBALS
 const logInButton = document.getElementById('log-in');
 const userContainer = document.getElementById('container');
+
+//=======================================================
+//MAIN
+
+//=======================================================
+//CALLBACKS
+
+//=======================================================
+//FIREBASE
+
+
+//Login / logout
+var provider = new firebase.auth.GithubAuthProvider();
 
 logInButton.addEventListener('click', () => {
     firebase.auth().signInWithPopup(provider).then(result => {
@@ -22,8 +39,15 @@ logInButton.addEventListener('click', () => {
             }).catch(error => {
                 console.log(error);
             });
-        })
+        });
     }).catch(error => {
         console.log(error);
     });
 });
+
+//=======================================================
+//FUNCTIONS
+
+
+
+
