@@ -14,10 +14,13 @@ class App extends React.Component {
                 name: '',
                 photo: ''
             },
-            results: []
+            results: [],
+            headerAction: ''
         };
 
         this.handleLogIn = this.handleLogIn.bind(this);
+        this.handleFavorites = this.handleFavorites.bind(this);
+        this.closeFavorites = this.closeFavorites.bind(this);
         this.findResults = this.findResults.bind(this);
     }
 
@@ -34,13 +37,25 @@ class App extends React.Component {
                     photo: user.photoURL
                 }
             });
-            setTimeout(() => {
-                console.log(this.state.user);
-            }, 1)
         }).catch(error => {
             console.log(error);
         });
     }
+
+    handleFavorites() {
+        this.setState({
+            headerAction: 'favorites'
+        });
+        console.log('klick');
+    }
+    
+    closeFavorites() {
+        this.setState({
+            headerAction: ''
+        });
+        console.log('klick');
+    }
+
 
     //FINDRESULTS
     findResults() {
@@ -171,6 +186,9 @@ class App extends React.Component {
                     handleLogIn={this.handleLogIn}
                     userName={this.state.user.name}
                     userPicture={this.state.user.photo}
+                    handleFavorites={this.handleFavorites}
+                    headerAction={this.state.headerAction}
+                    closeFavorites={this.closeFavorites}
                 />
                 {/*<!-- SEARCH CONTAINER -->*/}
                 <div className="search-container">
@@ -285,28 +303,28 @@ class Header extends React.Component {
                     </div>
                 </header>
             );
-        } else {
+        } else if (this.props.loginStatus) {
             return (
                 <header className="header">
                     <img src="./rescources/logo.png" alt="MusicSearch" className="logo"/>
-                    {/*<!-- Boxen som visas när man är inloggad -->*/}
+                    {this.props.headerAction !== 'favorites' &&
                     <div className="log-in-container">
                         <div className="user-box">
                             <img src={this.props.userPicture} alt="userPicture" className="profile-picture"/>
                             <h4>{this.props.userName}</h4>
                             <hr className="divider"/>
-                            <span className="favorites"><i
+                            <span className="favorites" onClick={this.props.handleFavorites}><i
                                 className="material-icons">favorite_border</i>Favorites</span>
                             <span className="log-out" id="log-out">Log out</span>
                         </div>
                     </div>
-                    {/*<!----------------------------------->
-                     <!-- Favoriter -->*/}
+                    }
+                    {this.props.headerAction === 'favorites' &&
                     <div className="log-in-container">
                         <div className="user-box">
-                            <img src="http://placehold.it/50x50" alt="" className="profile-picture"/>
-                            <h4>Robert Åhlund</h4>
-                            <i className="material-icons">close</i>
+                            <img src={this.props.userPicture} alt="userPicture" className="profile-picture"/>
+                            <h4>{this.props.userName}</h4>
+                            <i className="material-icons" onClick={this.props.closeFavorites}>close</i>
                             <hr className="divider"/>
                             <h3>Favorites</h3>
                             <div className="favorite-search-wrap">
@@ -348,43 +366,101 @@ class Header extends React.Component {
                                         <td>Lyrics</td>
                                         <td><i className="material-icons">favorite</i></td>
                                     </tr>
-                                    <tr>
-                                        <td>Låttitel</td>
-                                        <td>Artist</td>
-                                        <td>Album</td>
-                                        <td>YouTube</td>
-                                        <td>Spotify</td>
-                                        <td>Lyrics</td>
-                                        <td><i className="material-icons">favorite</i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Låttitel</td>
-                                        <td>Artist</td>
-                                        <td>Album</td>
-                                        <td>YouTube</td>
-                                        <td>Spotify</td>
-                                        <td>Lyrics</td>
-                                        <td><i className="material-icons">favorite</i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Låttitel</td>
-                                        <td>Artist</td>
-                                        <td>Album</td>
-                                        <td>YouTube</td>
-                                        <td>Spotify</td>
-                                        <td>Lyrics</td>
-                                        <td><i className="material-icons">favorite</i></td>
-                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
-                    {/*<!----------------------------------->*/}
+                    }
+
                 </header>
             );
         }
     }
+
+    /*
+     {<!----------------------------------->
+     <!-- Favoriter -->}
+     <div className="log-in-container">
+     <div className="user-box">
+     <img src="http://placehold.it/50x50" alt="" className="profile-picture"/>
+     <h4>Robert Åhlund</h4>
+     <i className="material-icons">close</i>
+     <hr className="divider"/>
+     <h3>Favorites</h3>
+     <div className="favorite-search-wrap">
+     <input type="text" className="filter-favorites" placeholder="Search"/>
+     <i className="material-icons">search</i>
+     </div>
+     <div className="table-container">
+     <table>
+     <tbody>
+     <tr>
+     <th>Track<i className="material-icons">arrow_drop_down</i></th>
+     <th>Artist<i className="material-icons">arrow_drop_down</i></th>
+     <th>Album<i className="material-icons">arrow_drop_down</i></th>
+     </tr>
+     <tr className="active">
+     <td>Låttitel</td>
+     <td>Artist</td>
+     <td>Album</td>
+     <td>YouTube</td>
+     <td>Spotify</td>
+     <td>Lyrics</td>
+     <td><i className="material-icons">favorite</i></td>
+     </tr>
+     <tr>
+     <td>Låttitel</td>
+     <td>Artist</td>
+     <td>Album</td>
+     <td>YouTube</td>
+     <td>Spotify</td>
+     <td>Lyrics</td>
+     <td><i className="material-icons">favorite</i></td>
+     </tr>
+     <tr>
+     <td>Låttitel</td>
+     <td>Artist</td>
+     <td>Album</td>
+     <td>YouTube</td>
+     <td>Spotify</td>
+     <td>Lyrics</td>
+     <td><i className="material-icons">favorite</i></td>
+     </tr>
+     <tr>
+     <td>Låttitel</td>
+     <td>Artist</td>
+     <td>Album</td>
+     <td>YouTube</td>
+     <td>Spotify</td>
+     <td>Lyrics</td>
+     <td><i className="material-icons">favorite</i></td>
+     </tr>
+     <tr>
+     <td>Låttitel</td>
+     <td>Artist</td>
+     <td>Album</td>
+     <td>YouTube</td>
+     <td>Spotify</td>
+     <td>Lyrics</td>
+     <td><i className="material-icons">favorite</i></td>
+     </tr>
+     <tr>
+     <td>Låttitel</td>
+     <td>Artist</td>
+     <td>Album</td>
+     <td>YouTube</td>
+     <td>Spotify</td>
+     <td>Lyrics</td>
+     <td><i className="material-icons">favorite</i></td>
+     </tr>
+     </tbody>
+     </table>
+     </div>
+     </div>
+     </div>
+     {<!----------------------------------->}
+     */
 }
 
 
