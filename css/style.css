@@ -249,6 +249,11 @@ SUGGESTIONS
 RESULT-BOX + LYRICS + BIO
  */
 
+.coverPic{
+    width: 25px;
+    height: 25px;
+}
+
 .results-container {
     padding-top: 50px;
 }
@@ -389,7 +394,7 @@ tr {
     border-bottom: 1px solid #996A8E;
 }
 
-tr:first-child, tr:last-child {
+tr:last-child {
     border-bottom: none;
 }
 
