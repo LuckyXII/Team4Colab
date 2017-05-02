@@ -1,6 +1,6 @@
 /*jshint esnext: true, moz: true*/
 /*jslint browser:true */
-/*global firebase, React, React.Component */
+/*global firebase, React, React.Component, fetch */
 
 //======================================================
 //CLASSES
