@@ -212,21 +212,21 @@ class App extends React.Component {
                                             labore et dolore magna aliqua.</p>
                                     </div>
                                 </div>
-                                <div className="col-lg-3 col-md-3 col-xs-6 bio">
-                                    <div className="biography">
-                                        <h3>Artist</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                            tempor
-                                            incididunt ut
-                                            labore
-                                            et dolore magna aliqua.
-                                            <br/><br/>
-                                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                                            aliquip
-                                            ex ea commodo
-                                            consequat.</p>
-                                        <img src="./rescources/lastfm_black_small.gif" alt="lastFM"/>
-                                    </div>
+                            </div>
+                            <div className="col-lg-3 col-md-3 col-xs-6 bio">
+                                <div className="biography">
+                                    <h3>Artist</h3>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                        tempor
+                                        incididunt ut
+                                        labore
+                                        et dolore magna aliqua.
+                                        <br/><br/>
+                                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                                        aliquip
+                                        ex ea commodo
+                                        consequat.</p>
+                                    <img src="./rescources/lastfm_black_small.gif" alt="lastFM"/>
                                 </div>
                             </div>
                         </div>
