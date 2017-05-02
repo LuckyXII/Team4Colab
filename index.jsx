@@ -9,8 +9,132 @@ class App extends React.Component{
     constructor(props){
         super(props);
         
-        this.state={};
+        this.state={results:[]};
+        
+        this.findResults = this.findResults.bind(this);
     }
+    
+    //FINDRESULTS
+    findResults(){
+        let searchInput = document.getElementById("main-search");  
+        let searchType;
+        let inputValue = "";
+        let title = "";
+        let artist = "";
+        let album = "";
+        let cover = "";
+        let resultTable = [];
+
+        //if empty search
+        if(searchInput !== ""){
+            inputValue = searchInput.value;    
+        }
+
+        //check for selected radioBtn
+        for(let i = 0; i < radioBtns.length; i++){
+            if(radioBtns[i].checked === true){
+                searchType = radioBtns[i].value;
+            }
+
+        }
+
+        let url = `https://api.spotify.com/v1/search?q=${inputValue}&type=${searchType}&limit=5`;
+
+        fetch(url)
+        .then((response)=> {
+            return response.json();
+        })
+        .then((result)=> {
+            console.log(result);
+
+            //Track
+            if(searchType === "track"){
+
+                let tracks = result.tracks.items;
+
+                for(let i = 0; i < tracks.length; i++){
+
+                    let item = document.createElement("tr");
+                    title = tracks[i].name;
+                    artist = tracks[i].artists[0].name;
+                    album = tracks[i].album.name;
+
+                    if(tracks[i].album.images.length !== 0){
+                        cover = tracks[i].album.images[0].url;    
+                    }
+
+                    item.innerHTML = `
+                                        <td>${title}</td>
+                                        <td>${artist}</td>
+                                        <td>${album}</td>
+                                        <td>YouTube</td>
+                                        <td>Spotify</td>
+                                        <td><i class="material-icons">favorite_border</i></td>
+                                    `;
+                    resultTable.push(item);
+
+                }
+
+            }
+            //Artist
+            else if(searchType === "artist"){
+                let artists = result.artists.items;
+
+                for(let i = 0; i < artists.length; i++){
+                    let item = document.createElement("tr");
+                    artist = artists[i].name;
+
+                    if(artists[i].images.length !== 0){
+                        cover = artists[i].images[0].url;    
+                    }
+
+                    item.innerHTML = `
+                                        <td><img class="coverPic" src="${cover}" alt="cover"/></td>
+                                        <td>${artist}</td>
+                                        <td></td>
+                                        <td>YouTube</td>
+                                        <td>Spotify</td>
+                                    `;
+                   resultTable.push(item);
+                }
+
+
+            }
+            //Album
+            else if(searchType === "album"){
+                let albums = result.albums.items;
+
+                for(let i = 0; i < albums.length; i++){
+                    let item = document.createElement("tr");
+                    artist = albums[i].artists[0].name;
+                    album = albums[i].name;
+
+                    if(albums[i].images.length !== 0){
+                        cover = albums[i].images[0].url;    
+                    }
+
+                    item.innerHTML = `
+
+                                        <td><img class="coverPic" src="${cover}" alt="cover"/></td>
+                                        <td>${artist}</td>
+                                        <td>${album}</td>
+                                        <td>YouTube</td>
+                                        <td>Spotify</td>
+                                    `;
+
+                    resultTable.push(item);
+                }
+
+            }
+
+
+            inputValue = "";
+            searchInput.value = "";
+
+            this.setState({results: resultTable});
+        });
+    }//END FINDRESULTS
+    
     
     render(){
         return(
@@ -129,7 +253,7 @@ class App extends React.Component{
 
                     {/*<!-- SEARCH INPUT -->*/}
                     <input type="text" id="main-search" placeholder="Search"/>
-                    <i id="searchBtn" className="material-icons">search</i>
+                    <i onClick={this.findResults} id="searchBtn" className="material-icons">search</i>
                     {/*<!--<button type="button" className="btn">Search</button>-->*/}
                     <div className="suggestions">
                         <ul>
@@ -149,74 +273,9 @@ class App extends React.Component{
                         <div id="searchResults" className="search-results">
 
 
-
-                            <div className="table-container">
-                                <table id="resultTable">
-                                    <tbody>
-                                        <tr>
-                                            <th>Track<i className="material-icons">arrow_drop_down</i></th>
-                                            <th>Artist<i className="material-icons">arrow_drop_down</i></th>
-                                            <th>Album<i className="material-icons">arrow_drop_down</i></th>
-                                        </tr>
-
-                                        <tr>
-                                            <td>Låttitel</td>
-                                            <td>Artist</td>
-                                            <td>Album</td>
-                                            <td>YouTube</td>
-                                            <td>Spotify</td>
-                                            <td>Lyrics</td>
-                                            <td><i className="material-icons">favorite_border</i></td>
-                                        </tr>
-                                        <tr className="active">
-                                            <td>Låttitel</td>
-                                            <td>Artist</td>
-                                            <td>Album</td>
-                                            <td>YouTube</td>
-                                            <td>Spotify</td>
-                                            <td>Lyrics</td>
-                                            <td><i className="material-icons">favorite_border</i></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Låttitel</td>
-                                            <td>Artist</td>
-                                            <td>Album</td>
-                                            <td>YouTube</td>
-                                            <td>Spotify</td>
-                                            <td>Lyrics</td>
-                                            <td><i className="material-icons">favorite_border</i></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Låttitel</td>
-                                            <td>Artist</td>
-                                            <td>Album</td>
-                                            <td>YouTube</td>
-                                            <td>Spotify</td>
-                                            <td>Lyrics</td>
-                                            <td><i className="material-icons">favorite_border</i></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Låttitel</td>
-                                            <td>Artist</td>
-                                            <td>Album</td>
-                                            <td>YouTube</td>
-                                            <td>Spotify</td>
-                                            <td>Lyrics</td>
-                                            <td><i className="material-icons">favorite_border</i></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Låttitel</td>
-                                            <td>Artist</td>
-                                            <td>Album</td>
-                                            <td>YouTube</td>
-                                            <td>Spotify</td>
-                                            <td>Lyrics</td>
-                                            <td><i className="material-icons">favorite_border</i></td>
-                                        </tr>
-                                    </tbody>
-
-                                </table>
-                            </div>
+                            {/*SEARCH RESULTS*/}
+                            <SearchResults results={this.state.results}/>
+                            
                             <div className="quote">
                                 <h3>Random quote from Artist</h3>
                                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
@@ -245,12 +304,48 @@ class App extends React.Component{
         );
     }
 }
+//END APP
+
+
+class SearchResults extends React.Component{
+    render(){
+        let results = this.props.results;
+        let tableBody = document.getElementById("tableBody");
+        
+        if(tableBody !== null){
+            tableBody.textContent ="";
+        }
+        
+        for(let i = 0; i < results.length; i++){
+            tableBody.appendChild(results[i]);
+        }
+        
+        return(
+            <div className="table-container">
+                <table id="resultTable">
+                    <thead>
+                        <tr>
+                            <th>Track<i className="material-icons">arrow_drop_down</i></th>
+                            <th>Artist<i className="material-icons">arrow_drop_down</i></th>
+                            <th>Album<i className="material-icons">arrow_drop_down</i></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        
+                    </tbody>
+
+                </table>
+            </div>
+        );
+    }
+}
+
 
 
 //=======================================================
 //GLOBALS
 var AppComp = document.getElementById("App");
-
+const radioBtns = document.getElementsByClassName("radio-btn");
 
 //=======================================================
 //MAIN
