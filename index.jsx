@@ -161,28 +161,13 @@ class App extends React.Component {
             if (obj.track.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1 ||
                 obj.artist.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1 ||
                 obj.album.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1) {
-                filteredList.push(obj)
+                filteredList.push(obj);
             }
         });
         console.log(filteredList);
         this.setState({
             favorites: filteredList
         });
-    }
-
-    getArtistBio(e) {
-        console.log("testbio");
-        let artist = e.target.textContent;
-        let url = `http://ws.audioscrobbler.com/2.0/?/2.0/?method=artist.getinfo&artist=${artist}&api_key=b971e5066edbb8974e0bb47164fd33a4&format=json`;
-
-        fetch(url)
-            .then((response) => {
-                return response.json();
-            })
-            .then((result) => {
-                console.log(result);
-            });
-
     }
 
     componentDidMount() {
