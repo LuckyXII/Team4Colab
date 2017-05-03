@@ -23,6 +23,14 @@ searchBtn.addEventListener("click", findResult);
 //=======================================================
 //FUNCTIONS
 
+function testPreview(){
+    
+    let url = "https://p.scdn.co/mp3-preview/a86af6cfc8543b4acfdb57134147067550b1ef9f?cid=null"; 
+    var audio = new Audio(url);
+audio.play();
+ 
+}
+
 function getArtistBio(e){
     
     
@@ -131,10 +139,11 @@ function findResult(){
                 
                item.innerHTML = `<div class="table listItem">
                                     <div class="tableRow listItem">
-                                        <img class="listItem cover" src=${cover} 
+                                        <img class="listItem cover" src=${cover}/> 
                                         <div class="tableCell song listItem">${title}</div>
                                         <div class="tableCell artist listItem">${artist}</div>
                                         <div class="tableCell album listItem">${album}</div>
+                                        <div onClick=testPreview class="tableCell spotify listItem">spotify</div>
                                     </div>
                                 </div>`;
                 list.appendChild(item);
