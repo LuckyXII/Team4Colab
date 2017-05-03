@@ -316,7 +316,7 @@ class App extends React.Component {
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-3 col-xs-6 bio">
-                                 <div class="biography">
+                                 <div className="biography">
                                     <h3>Artist</h3>
                                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
                                         labore
