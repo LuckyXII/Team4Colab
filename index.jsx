@@ -80,9 +80,9 @@ class App extends React.Component {
                 console.log('state', this.state.favorites);
                 this.state.favorites.map(favorite => {
                     console.log('map', favorite);
-                })
-            }, 1)
-        })
+                });
+            }, 1);
+        });
     }
 
     closeFavorites() {
@@ -316,7 +316,16 @@ class App extends React.Component {
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-3 col-xs-6 bio">
-                                <Bio/>
+                                 <div class="biography">
+                                    <h3>Artist</h3>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                                        labore
+                                        et dolore magna aliqua.
+                                        <br/><br/>
+                                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                        consequat.</p>
+                                    <img src="./rescources/lastfm_black_small.gif" alt="lastFM"/>
+                                </div>
                                 {/*<img src="./rescources/lastfm_black_small.gif" alt="lastFM"/>*/}
                             </div>
                         </div>
