@@ -67,6 +67,34 @@ class App extends React.Component {
         });
     }
 
+    componentDidMount() {
+        let _this = this;
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in.
+                console.log(user);
+                _this.setState({
+                    loggedIn: true,
+                    user: {
+                        name: user.displayName,
+                        photo: user.photoURL
+                    }
+                });
+                var displayName = user.displayName;
+                var email = user.email;
+                var emailVerified = user.emailVerified;
+                var photoURL = user.photoURL;
+                var isAnonymous = user.isAnonymous;
+                var uid = user.uid;
+                var providerData = user.providerData;
+                // ...
+            } else {
+                // User is signed out.
+                // ...
+            }
+        });
+    }
+
 
     //FINDRESULTS
     findResults() {
