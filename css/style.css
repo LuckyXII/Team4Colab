@@ -231,7 +231,7 @@ USER-BOX
     cursor: pointer;
 }
 
-tr:first-child {
+.user-box tr:first-child {
     border-bottom: none;
 }
 

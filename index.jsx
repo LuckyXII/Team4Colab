@@ -17,7 +17,11 @@ class App extends React.Component {
             },
             results: [],
             headerAction: '',
-            favorites: []
+            favorites: [],
+            bioName: "",
+            bioSimilar: [],
+            bioSummary: "",
+            bioImg: ""
         };
 
         this.handleLogIn = this.handleLogIn.bind(this);
@@ -102,7 +106,27 @@ class App extends React.Component {
         })
         .then((result)=> {
         	console.log(result);
+            
+            let art = result.artist;
+            let summary = art.bio.summary;
+            let img = art.image.length > 0 ? art.image[0]["#text"] : "";
+            let similar = art.similar.artist; 
+            let name = art.name;
+            let similarNames =[];
+            
+            for (let x =0; x < similar.length; x++){
+                similarNames.push(similar[x].name);
+            }
+            
+            this.setSate({
+                bioName : name,
+                bioImg : img,
+                bioSimilar : similarNames,
+                bioSummary : summary
+            });
         });
+            
+            
         
     }
 
@@ -316,16 +340,7 @@ class App extends React.Component {
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-3 col-xs-6 bio">
-                                 <div className="biography">
-                                    <h3>Artist</h3>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                                        labore
-                                        et dolore magna aliqua.
-                                        <br/><br/>
-                                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                        consequat.</p>
-                                    <img src="./rescources/lastfm_black_small.gif" alt="lastFM"/>
-                                </div>
+                                 <Bio similar={this.state.bioSimilar} summary={this.state.bioSummary}  name={this.state.bioName} coverImg={this.state.bioImg}/>
                                 {/*<img src="./rescources/lastfm_black_small.gif" alt="lastFM"/>*/}
                             </div>
                         </div>
@@ -343,12 +358,12 @@ class Bio extends React.Component{
         return(
             <div className="biography">
                 <img src={this.props.coverImg} alt="cover"/>
-                <h2>test</h2>
+                <h2>{this.props.name}</h2>
                 <div>
-                    <h3>test</h3>
-                    <p>test</p>
-                    <h3>test</h3>
-                    <p>test</p>
+                    <h3>Similar Artists:</h3>
+                    <p>{this.props.similar}</p>
+                    <h3>Band Biography</h3>
+                    <p>{this.props.summary}</p>
                 </div>
                 <img src="./rescources/lastfm_black_small.gif" alt="lastFM"/>
             </div>
