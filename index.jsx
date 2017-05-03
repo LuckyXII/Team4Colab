@@ -17,7 +17,9 @@ class App extends React.Component {
             },
             results: [],
             headerAction: '',
-            favorites: []
+            favorites: [],
+            originalFavorites: [],
+            favoritesFilter: ''
         };
 
         this.handleLogIn = this.handleLogIn.bind(this);
@@ -25,6 +27,7 @@ class App extends React.Component {
         this.handleFavorites = this.handleFavorites.bind(this);
         this.closeFavorites = this.closeFavorites.bind(this);
         this.removeFavorite = this.removeFavorite.bind(this);
+        this.filterFavorites = this.filterFavorites.bind(this);
         this.findResults = this.findResults.bind(this);
         this.getArtistBio = this.getArtistBio.bind(this);
     }
@@ -68,13 +71,9 @@ class App extends React.Component {
         const database = firebase.database();
         //LÄSA DATA FRÅN DATABASEN
         database.ref('users/' + this.state.user.uid + '/favorites/').on('value', snapshot => {
-            //console.log(snapshot.val());
             let data = snapshot.val();
             let allFavorites = [];
             for (let favorite in data) {
-                //allFavorites.push(data[favorite]);
-                //console.log(favorite);
-                //console.log(data[favorite].track);
                 allFavorites.push({
                     track: data[favorite].track,
                     album: data[favorite].album,
@@ -85,14 +84,17 @@ class App extends React.Component {
                 });
             }
             this.setState({
-                favorites: allFavorites
+                favorites: allFavorites,
+                originalFavorites: allFavorites
             });
-            setTimeout(() => {
-                console.log('state', this.state.favorites);
-                this.state.favorites.map(favorite => {
-                    console.log('map', favorite);
-                });
-            }, 1);
+            /*
+             setTimeout(() => {
+             console.log('state', this.state.favorites);
+             this.state.favorites.map(favorite => {
+             console.log('map', favorite);
+             });
+             }, 1);
+             */
         });
     }
 
@@ -100,21 +102,6 @@ class App extends React.Component {
         this.setState({
             headerAction: ''
         });
-    }
-    
-    getArtistBio(e){
-        console.log("testbio");
-        let artist = e.target.textContent; 
-        let url = `http://ws.audioscrobbler.com/2.0/?/2.0/?method=artist.getinfo&artist=${artist}&api_key=b971e5066edbb8974e0bb47164fd33a4&format=json`;
-        
-        fetch(url)
-        .then((response)=> {
-        	return response.json();
-        })
-        .then((result)=> {
-        	console.log(result);
-        });
-        
     }
 
     removeFavorite(event) {
@@ -124,9 +111,45 @@ class App extends React.Component {
         database.ref('users/' + this.state.user.uid + '/favorites/' + targetId).set(null);
     }
 
+    filterFavorites(event) {
+        this.setState({
+            filterFavorites: event.target.value
+        });
+
+        let allFavorites = this.state.originalFavorites;
+        //console.log(allFavorites);
+        let filteredList = [];
+        allFavorites.filter(obj => {
+            if (obj.track.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1 ||
+                obj.artist.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1 ||
+                obj.album.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1) {
+                filteredList.push(obj)
+            }
+        });
+        console.log(filteredList);
+        this.setState({
+            favorites: filteredList
+        });
+    }
+
+    getArtistBio(e) {
+        console.log("testbio");
+        let artist = e.target.textContent;
+        let url = `http://ws.audioscrobbler.com/2.0/?/2.0/?method=artist.getinfo&artist=${artist}&api_key=b971e5066edbb8974e0bb47164fd33a4&format=json`;
+
+        fetch(url)
+            .then((response) => {
+                return response.json();
+            })
+            .then((result) => {
+                console.log(result);
+            });
+
+    }
+
     componentDidMount() {
         let _this = this;
-        firebase.auth().onAuthStateChanged(function(user) {
+        firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
                 // User is signed in.
                 console.log(user);
@@ -149,7 +172,7 @@ class App extends React.Component {
                     youtube: 'YouTube',
                     spotify: 'Spotify'
                 });
-                    // ...
+                // ...
             } else {
                 // User is signed out.
                 // ...
@@ -293,6 +316,7 @@ class App extends React.Component {
                     closeFavorites={this.closeFavorites}
                     favorites={this.state.favorites}
                     removeFavorite={this.removeFavorite}
+                    filterInput={this.filterFavorites}
                 />
                 {/*<!-- SEARCH CONTAINER -->*/}
                 <div className="search-container">
@@ -311,14 +335,14 @@ class App extends React.Component {
                         <i onClick={this.findResults} id="searchBtn" className="material-icons">search</i>
                         {/*<!--<button type="button" className="btn">Search</button>-->*/}
                         {/*<div className="suggestions">
-                            <ul>
-                                <li>Resultat 1</li>
-                                <li>Resultat 2</li>
-                                <li>Resultat 3</li>
-                                <li>Resultat 4</li>
-                                <li>Resultat 5</li>
-                            </ul>
-                        </div>*/}
+                         <ul>
+                         <li>Resultat 1</li>
+                         <li>Resultat 2</li>
+                         <li>Resultat 3</li>
+                         <li>Resultat 4</li>
+                         <li>Resultat 5</li>
+                         </ul>
+                         </div>*/}
                     </div>
                     {/* <!-- Boxen som visas när man har sökt -->*/}
                     <div className="results-container">
@@ -336,13 +360,15 @@ class App extends React.Component {
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-3 col-xs-6 bio">
-                                 <div className="biography">
+                                <div className="biography">
                                     <h3>Artist</h3>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                        incididunt ut
                                         labore
                                         et dolore magna aliqua.
                                         <br/><br/>
-                                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                                        aliquip ex ea commodo
                                         consequat.</p>
                                     <img src="./rescources/lastfm_black_small.gif" alt="lastFM"/>
                                 </div>
@@ -358,9 +384,9 @@ class App extends React.Component {
 //END APP
 
 
-class Bio extends React.Component{
-    render(){
-        return(
+class Bio extends React.Component {
+    render() {
+        return (
             <div className="biography">
                 <img src={this.props.coverImg} alt="cover"/>
                 <h2>test</h2>
@@ -448,11 +474,12 @@ class Header extends React.Component {
                             <hr className="divider"/>
                             <h3>Favorites</h3>
                             <div className="favorite-search-wrap">
-                                <input type="text" className="filter-favorites" placeholder="Search"/>
+                                <input type="text" className="filter-favorites" placeholder="Search"
+                                       onChange={this.props.filterInput}/>
                                 <i className="material-icons">search</i>
                             </div>
                             {this.props.favorites.length === 0 &&
-                                <h3 className="smaller">Du har inga favoriter :(</h3>
+                            <h3 className="smaller">Du har inga favoriter :(</h3>
                             }
                             {this.props.favorites.length > 0 &&
                             <div className="table-container">
