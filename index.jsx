@@ -28,6 +28,7 @@ class App extends React.Component {
         this.handleLogOut = this.handleLogOut.bind(this);
         this.handleFavorites = this.handleFavorites.bind(this);
         this.closeFavorites = this.closeFavorites.bind(this);
+        this.removeFavorite = this.removeFavorite.bind(this);
         this.findResults = this.findResults.bind(this);
         this.getArtistBio = this.getArtistBio.bind(this);
     }
@@ -75,7 +76,17 @@ class App extends React.Component {
             let data = snapshot.val();
             let allFavorites = [];
             for (let favorite in data) {
-                allFavorites.push(data[favorite]);
+                //allFavorites.push(data[favorite]);
+                //console.log(favorite);
+                //console.log(data[favorite].track);
+                allFavorites.push({
+                    track: data[favorite].track,
+                    album: data[favorite].album,
+                    artist: data[favorite].artist,
+                    youtube: 'YouTube',
+                    spotify: 'Spotify',
+                    id: favorite
+                });
             }
             this.setState({
                 favorites: allFavorites
@@ -130,6 +141,13 @@ class App extends React.Component {
         
     }
 
+    removeFavorite(event) {
+        let targetId = event.target.parentNode.parentNode.attributes['data-id'].value;
+        console.log(targetId);
+        const database = firebase.database();
+        database.ref('users/' + this.state.user.uid + '/favorites/' + targetId).set(null);
+    }
+
     componentDidMount() {
         let _this = this;
         firebase.auth().onAuthStateChanged(function(user) {
@@ -147,6 +165,7 @@ class App extends React.Component {
 
                 let uid = user.uid;
                 const database = firebase.database();
+
                 database.ref('users/' + uid + '/favorites/').push({
                     track: 'Testar1',
                     album: 'Testalbum1',
@@ -297,6 +316,7 @@ class App extends React.Component {
                     headerAction={this.state.headerAction}
                     closeFavorites={this.closeFavorites}
                     favorites={this.state.favorites}
+                    removeFavorite={this.removeFavorite}
                 />
                 {/*<!-- SEARCH CONTAINER -->*/}
                 <div className="search-container">
@@ -446,6 +466,10 @@ class Header extends React.Component {
                                 <input type="text" className="filter-favorites" placeholder="Search"/>
                                 <i className="material-icons">search</i>
                             </div>
+                            {this.props.favorites.length === 0 &&
+                                <h3 className="smaller">Du har inga favoriter :(</h3>
+                            }
+                            {this.props.favorites.length > 0 &&
                             <div className="table-container">
                                 <table>
                                     <tbody>
@@ -455,18 +479,20 @@ class Header extends React.Component {
                                         <th>Album<i className="material-icons">arrow_drop_down</i></th>
                                     </tr>
                                     {this.props.favorites.map((favorite, index) =>
-                                    <tr key={index}>
-                                        <td>{favorite.track}</td>
-                                        <td>{favorite.artist}</td>
-                                        <td>{favorite.album}</td>
-                                        <td>{favorite.youtube}</td>
-                                        <td>{favorite.spotify}</td>
-                                        <td><i className="material-icons">favorite</i></td>
-                                    </tr>
+                                        <tr key={index} data-id={favorite.id}>
+                                            <td>{favorite.track}</td>
+                                            <td>{favorite.artist}</td>
+                                            <td>{favorite.album}</td>
+                                            <td>{favorite.youtube}</td>
+                                            <td>{favorite.spotify}</td>
+                                            <td><i className="material-icons" onClick={this.props.removeFavorite}>favorite</i>
+                                            </td>
+                                        </tr>
                                     )}
                                     </tbody>
                                 </table>
                             </div>
+                            }
                         </div>
                     </div>
                     }

@@ -16,6 +16,10 @@ ul {
     padding: 0;
 }
 
+.smaller {
+    font-size: 1em;
+}
+
 .logo {
     width: 207px;
     height: 30px;
@@ -426,6 +430,7 @@ td > i {
     font-size: 24px;
     vertical-align: middle;
     padding: 0 8px 3px 0;
+    cursor: pointer;
 }
 
 th > i {
