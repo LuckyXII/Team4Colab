@@ -24,7 +24,14 @@ ul {
 }
 
 .log-in-container {
-    float: right;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+}
+
+.header {
+    position: relative;
 }
 
 .btn {
@@ -206,6 +213,7 @@ USER-BOX
 
 .favorites {
     font-size: 16px;
+    cursor: pointer;
 }
 
 .favorites > i {
@@ -218,6 +226,7 @@ USER-BOX
     display: block;
     margin: 20px 0 0 0;
     text-align: right;
+    cursor: pointer;
 }
 
 /*

@@ -55,6 +55,7 @@ class App extends React.Component {
     }
 
     handleFavorites() {
+        console.log('klick');
         this.setState({
             headerAction: 'favorites'
         });
@@ -230,7 +231,7 @@ class App extends React.Component {
                     {/* <!-- Boxen som visas när man har sökt -->*/}
                     <div className="results-container">
                         <div className="row">
-                            <div className="col-xs-offset-3 col-lg-6 col-md-6 col-xs-12 search">
+                            <div className="col-lg-offset-3 col-lg-6 col-md-6 col-md-offset-3 col-xs-12 search">
                                 <div id="searchResults" className="search-results">
                                     {/*SEARCH RESULTS*/}
                                     <SearchResults results={this.state.results}/>
