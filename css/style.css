@@ -307,6 +307,10 @@ RESULT-BOX + LYRICS + BIO
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
+.biography > img {
+    border-radius: 5px;
+}
+
 .biography > h3, h5 {
     text-align: center;
     font-weight: 500;
