@@ -12,10 +12,12 @@ class App extends React.Component {
             loggedIn: false,
             user: {
                 name: '',
-                photo: ''
+                photo: '',
+                uid: ''
             },
             results: [],
-            headerAction: ''
+            headerAction: '',
+            favorites: []
         };
 
         this.handleLogIn = this.handleLogIn.bind(this);
@@ -36,7 +38,8 @@ class App extends React.Component {
                 loggedIn: true,
                 user: {
                     name: user.displayName,
-                    photo: user.photoURL
+                    photo: user.photoURL,
+                    uid: user.uid
                 }
             });
         }).catch(error => {
@@ -60,6 +63,26 @@ class App extends React.Component {
         this.setState({
             headerAction: 'favorites'
         });
+
+        const database = firebase.database();
+        //LÄSA DATA FRÅN DATABASEN
+        database.ref('users/' + this.state.user.uid + '/favorites/').on('value', snapshot => {
+            //console.log(snapshot.val());
+            let data = snapshot.val();
+            let allFavorites = [];
+            for (let favorite in data) {
+                allFavorites.push(data[favorite]);
+            }
+            this.setState({
+                favorites: allFavorites
+            });
+            setTimeout(() => {
+                console.log('state', this.state.favorites);
+                this.state.favorites.map(favorite => {
+                    console.log('map', favorite);
+                })
+            }, 1)
+        })
     }
 
     closeFavorites() {
@@ -81,6 +104,38 @@ class App extends React.Component {
         	console.log(result);
         });
         
+    }
+
+    componentDidMount() {
+        let _this = this;
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                // User is signed in.
+                console.log(user);
+                _this.setState({
+                    loggedIn: true,
+                    user: {
+                        name: user.displayName,
+                        photo: user.photoURL,
+                        uid: user.uid
+                    }
+                });
+
+                let uid = user.uid;
+                const database = firebase.database();
+                database.ref('users/' + uid + '/favorites/').push({
+                    track: 'Testar1',
+                    album: 'Testalbum1',
+                    artist: 'Testartist',
+                    youtube: 'YouTube',
+                    spotify: 'Spotify'
+                });
+                    // ...
+            } else {
+                // User is signed out.
+                // ...
+            }
+        });
     }
 
 
@@ -217,6 +272,7 @@ class App extends React.Component {
                     handleFavorites={this.handleFavorites}
                     headerAction={this.state.headerAction}
                     closeFavorites={this.closeFavorites}
+                    favorites={this.state.favorites}
                 />
                 {/*<!-- SEARCH CONTAINER -->*/}
                 <div className="search-container">
@@ -374,33 +430,16 @@ class Header extends React.Component {
                                         <th>Artist<i className="material-icons">arrow_drop_down</i></th>
                                         <th>Album<i className="material-icons">arrow_drop_down</i></th>
                                     </tr>
-                                    <tr className="active">
-                                        <td>Låttitel</td>
-                                        <td>Artist</td>
-                                        <td>Album</td>
-                                        <td>YouTube</td>
-                                        <td>Spotify</td>
-                                        <td>Lyrics</td>
+                                    {this.props.favorites.map((favorite, index) =>
+                                    <tr key={index}>
+                                        <td>{favorite.track}</td>
+                                        <td>{favorite.artist}</td>
+                                        <td>{favorite.album}</td>
+                                        <td>{favorite.youtube}</td>
+                                        <td>{favorite.spotify}</td>
                                         <td><i className="material-icons">favorite</i></td>
                                     </tr>
-                                    <tr>
-                                        <td>Låttitel</td>
-                                        <td>Artist</td>
-                                        <td>Album</td>
-                                        <td>YouTube</td>
-                                        <td>Spotify</td>
-                                        <td>Lyrics</td>
-                                        <td><i className="material-icons">favorite</i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Låttitel</td>
-                                        <td>Artist</td>
-                                        <td>Album</td>
-                                        <td>YouTube</td>
-                                        <td>Spotify</td>
-                                        <td>Lyrics</td>
-                                        <td><i className="material-icons">favorite</i></td>
-                                    </tr>
+                                    )}
                                     </tbody>
                                 </table>
                             </div>

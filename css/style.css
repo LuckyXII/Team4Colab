@@ -142,6 +142,8 @@ USER-BOX
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    max-height: 50vh;
+    overflow: scroll;
 }
 
 .profile-picture {
@@ -227,6 +229,10 @@ USER-BOX
     margin: 20px 0 0 0;
     text-align: right;
     cursor: pointer;
+}
+
+tr:first-child {
+    border-bottom: none;
 }
 
 /*
@@ -388,6 +394,11 @@ li {
 /*
 TABLE-TEST
  */
+
+.table-container {
+    max-height: 360px;
+    overflow: scroll;
+}
 
 table {
     border-collapse: collapse;
