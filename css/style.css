@@ -142,8 +142,8 @@ USER-BOX
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-    max-height: 50vh;
-    overflow: scroll;
+   /* max-height: 50vh;
+    overflow: scroll;*/
 }
 
 .profile-picture {
