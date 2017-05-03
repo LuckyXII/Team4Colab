@@ -246,7 +246,7 @@ class App extends React.Component {
                         <input type="text" id="main-search" placeholder="Search"/>
                         <i onClick={this.findResults} id="searchBtn" className="material-icons">search</i>
                         {/*<!--<button type="button" className="btn">Search</button>-->*/}
-                        <div className="suggestions">
+                        {/*<div className="suggestions">
                             <ul>
                                 <li>Resultat 1</li>
                                 <li>Resultat 2</li>
@@ -254,7 +254,7 @@ class App extends React.Component {
                                 <li>Resultat 4</li>
                                 <li>Resultat 5</li>
                             </ul>
-                        </div>
+                        </div>*/}
                     </div>
                     {/* <!-- Boxen som visas när man har sökt -->*/}
                     <div className="results-container">
