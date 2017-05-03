@@ -1,6 +1,6 @@
 /*jshint esnext: true, moz: true*/
 /*jslint browser:true */
-/*global firebase, React, React.Component, fetch */
+/*global firebase, React, React.Component, fetch, console, ReactDOM */
 
 //======================================================
 //CLASSES
@@ -23,6 +23,7 @@ class App extends React.Component {
         this.handleFavorites = this.handleFavorites.bind(this);
         this.closeFavorites = this.closeFavorites.bind(this);
         this.findResults = this.findResults.bind(this);
+        this.getArtistBio = this.getArtistBio.bind(this);
     }
 
     handleLogIn() {
@@ -48,7 +49,7 @@ class App extends React.Component {
             console.log('Du är utloggad.');
             this.setState({
                 loggedIn: false
-            })
+            });
         }).catch(error => {
             console.log(error);
         });
@@ -65,6 +66,21 @@ class App extends React.Component {
         this.setState({
             headerAction: ''
         });
+    }
+    
+    getArtistBio(e){
+        console.log("testbio");
+        let artist = e.target.textContent; 
+        let url = `http://ws.audioscrobbler.com/2.0/?/2.0/?method=artist.getinfo&artist=${artist}&api_key=b971e5066edbb8974e0bb47164fd33a4&format=json`;
+        
+        fetch(url)
+        .then((response)=> {
+        	return response.json();
+        })
+        .then((result)=> {
+        	console.log(result);
+        });
+        
     }
 
 
@@ -119,7 +135,7 @@ class App extends React.Component {
 
                         item.innerHTML = `
                                         <td>${title}</td>
-                                        <td>${artist}</td>
+                                        <td onClick={this.getArtistBio}>${artist}</td>
                                         <td>${album}</td>
                                         <td>YouTube</td>
                                         <td>Spotify</td>
@@ -144,7 +160,7 @@ class App extends React.Component {
 
                         item.innerHTML = `
                                         <td><img class="coverPic" src="${cover}" alt="cover"/></td>
-                                        <td>${artist}</td>
+                                        <td onClick={this.getArtistBio}>${artist}</td>
                                         <td></td>
                                         <td>YouTube</td>
                                         <td>Spotify</td>
@@ -170,7 +186,7 @@ class App extends React.Component {
                         item.innerHTML = `
 
                                         <td><img class="coverPic" src="${cover}" alt="cover"/></td>
-                                        <td>${artist}</td>
+                                        <td onClick={this.getArtistBio}>${artist}</td>
                                         <td>${album}</td>
                                         <td>YouTube</td>
                                         <td>Spotify</td>
@@ -218,7 +234,7 @@ class App extends React.Component {
                         <input type="text" id="main-search" placeholder="Search"/>
                         <i onClick={this.findResults} id="searchBtn" className="material-icons">search</i>
                         {/*<!--<button type="button" className="btn">Search</button>-->*/}
-                        <div className="suggestions">
+                        {/*<div className="suggestions">
                             <ul>
                                 <li>Resultat 1</li>
                                 <li>Resultat 2</li>
@@ -226,7 +242,7 @@ class App extends React.Component {
                                 <li>Resultat 4</li>
                                 <li>Resultat 5</li>
                             </ul>
-                        </div>
+                        </div>*/}
                     </div>
                     {/* <!-- Boxen som visas när man har sökt -->*/}
                     <div className="results-container">
@@ -244,20 +260,8 @@ class App extends React.Component {
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-3 col-xs-6 bio">
-                                <div className="biography">
-                                    <h3>Artist</h3>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                        tempor
-                                        incididunt ut
-                                        labore
-                                        et dolore magna aliqua.
-                                        <br/><br/>
-                                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                                        aliquip
-                                        ex ea commodo
-                                        consequat.</p>
-                                    <img src="./rescources/lastfm_black_small.gif" alt="lastFM"/>
-                                </div>
+                                <Bio/>
+                                {/*<img src="./rescources/lastfm_black_small.gif" alt="lastFM"/>*/}
                             </div>
                         </div>
                     </div>
@@ -269,6 +273,25 @@ class App extends React.Component {
 //END APP
 
 
+class Bio extends React.Component{
+    render(){
+        return(
+            <div className="biography">
+                <img src={this.props.coverImg} alt="cover"/>
+                <h2>test</h2>
+                <div>
+                    <h3>test</h3>
+                    <p>test</p>
+                    <h3>test</h3>
+                    <p>test</p>
+                </div>
+                <img src="./rescources/lastfm_black_small.gif" alt="lastFM"/>
+            </div>
+        );
+    }
+}
+
+//SEARCHRESULTS
 class SearchResults extends React.Component {
     render() {
         let results = this.props.results;
@@ -302,7 +325,7 @@ class SearchResults extends React.Component {
     }
 }
 
-
+//HEADER
 class Header extends React.Component {
     render() {
         if (!this.props.loginStatus) {
