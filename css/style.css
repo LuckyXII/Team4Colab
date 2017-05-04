@@ -393,6 +393,9 @@ li {
         -ms-flex-order: 3;
         order: 3;
     }
+    .mobile-hidden {
+        display: none;
+    }
 }
 
 /*

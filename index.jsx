@@ -264,9 +264,9 @@ class App extends React.Component {
                 const database = firebase.database();
 
                 database.ref('users/' + uid + '/favorites/').push({
-                    track: 'Testar1',
-                    album: 'Testalbum1',
-                    artist: 'Testartist',
+                    track: 'Testar2',
+                    album: 'Testalbum2',
+                    artist: 'Testartist43',
                     youtube: 'YouTube',
                     spotify: 'Spotify'
                 });
@@ -589,8 +589,8 @@ class Header extends React.Component {
                                             <td>{favorite.track}</td>
                                             <td>{favorite.artist}</td>
                                             <td>{favorite.album}</td>
-                                            <td>{favorite.youtube}</td>
-                                            <td>{favorite.spotify}</td>
+                                            <td className="mobile-hidden">{favorite.youtube}</td>
+                                            <td className="mobile-hidden">{favorite.spotify}</td>
                                             <td><i className="material-icons" onClick={this.props.removeFavorite}>favorite</i>
                                             </td>
                                         </tr>
