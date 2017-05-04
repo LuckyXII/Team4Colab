@@ -34,6 +34,8 @@ class App extends React.Component {
         this.filterFavorites = this.filterFavorites.bind(this);
         this.findResults = this.findResults.bind(this);
         this.getArtistBio = this.getArtistBio.bind(this);
+        this.getQuotes = this.getQuotes.bind(this);
+
     }
 
     handleLogIn() {
@@ -171,6 +173,10 @@ class App extends React.Component {
     }
 
     componentDidMount() {
+        
+        //find quote
+        this.getQuotes();
+        
         let _this = this;
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
@@ -202,7 +208,34 @@ class App extends React.Component {
             }
         });
     }
-
+    
+    
+    //GETQOUTES
+    getQuotes(){
+        
+        let url = `http://quotes.rest/qod.json?category=inspire`;
+        
+        fetch(url)
+        .then((response)=> {
+        	return response.json();
+        })
+        .then((result)=> {
+        	console.log(result); 
+            
+            let quote = result.contents.quotes[0];
+            let title = quote.title;
+            let author = quote.author;
+            let quoteContent = quote.quote;
+            
+            this.setState({
+                quoteTitle:title,
+                quoteAuthor:author,
+                quote:quoteContent
+            });
+            
+        });
+        
+    }
 
     //FINDRESULTS
     findResults() {
@@ -243,25 +276,12 @@ class App extends React.Component {
                     let tracks = result.tracks.items;
 
                     for (let i = 0; i < tracks.length; i++) {
-
-                        let item = document.createElement("tr");
                         title = tracks[i].name;
                         artist = tracks[i].artists[0].name;
                         album = tracks[i].album.name;
 
-                        if (tracks[i].album.images.length !== 0) {
-                            cover = tracks[i].album.images[0].url;
-                        }
-
-                        item.innerHTML = `
-                                        <td>${title}</td>
-                                        <td onClick={this.getArtistBio}>${artist}</td>
-                                        <td>${album}</td>
-                                        <td>YouTube</td>
-                                        <td>Spotify</td>
-                                        <td><i class="material-icons">favorite_border</i></td>
-                                    `;
-                        resultTable.push(item);
+                        let obj = {searchType:searchType,track:title,artist:artist,album:album};
+                        resultTable.push(obj);
 
                     }
 
@@ -271,21 +291,14 @@ class App extends React.Component {
                     let artists = result.artists.items;
 
                     for (let i = 0; i < artists.length; i++) {
-                        let item = document.createElement("tr");
                         artist = artists[i].name;
 
                         if (artists[i].images.length !== 0) {
                             cover = artists[i].images[0].url;
                         }
-
-                        item.innerHTML = `
-                                        <td><img class="coverPic" src="${cover}" alt="cover"/></td>
-                                        <td onClick={this.getArtistBio}>${artist}</td>
-                                        <td></td>
-                                        <td>YouTube</td>
-                                        <td>Spotify</td>
-                                    `;
-                        resultTable.push(item);
+                        
+                        let obj = {searchType:searchType,cover:cover,artist:artist};
+                        resultTable.push(obj);
                     }
 
 
@@ -295,24 +308,14 @@ class App extends React.Component {
                     let albums = result.albums.items;
 
                     for (let i = 0; i < albums.length; i++) {
-                        let item = document.createElement("tr");
                         artist = albums[i].artists[0].name;
                         album = albums[i].name;
 
                         if (albums[i].images.length !== 0) {
                             cover = albums[i].images[0].url;
                         }
-
-                        item.innerHTML = `
-
-                                        <td><img class="coverPic" src="${cover}" alt="cover"/></td>
-                                        <td onClick={this.getArtistBio}>${artist}</td>
-                                        <td>${album}</td>
-                                        <td>YouTube</td>
-                                        <td>Spotify</td>
-                                    `;
-
-                        resultTable.push(item);
+                        let obj = {searchType:searchType,cover:cover,artist:artist,album:album};
+                        resultTable.push(obj);
                     }
 
                 }
@@ -374,17 +377,13 @@ class App extends React.Component {
                                 <div id="searchResults" className="search-results">
                                     {/*SEARCH RESULTS*/}
                                     <SearchResults results={this.state.results}/>
-                                    <div className="quote">
-                                        <h3>Random quote from Artist</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                                            tempor incididunt ut
-                                            labore et dolore magna aliqua.</p>
-                                    </div>
+                                    {/*QOUTE OF THE DAY*/}
+                                    <Quote title={this.state.quoteTitle} quote={this.state.quote} author={this.state.quoteAuthor} />
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-3 col-xs-6 bio">
+                                 {/*BIOGRAPHY*/}
                                  <Bio similar={this.state.bioSimilar} summary={this.state.bioSummary}  name={this.state.bioName} coverImg={this.state.bioImg}/>
-                                {/*<img src="./rescources/lastfm_black_small.gif" alt="lastFM"/>*/}
                             </div>
                         </div>
                     </div>
@@ -395,7 +394,28 @@ class App extends React.Component {
 }
 //END APP
 
+//QUOTES
+class Quote extends React.Component{
+    render(){
+        
+        console.log(this.props);        
+        return(
+            <div className="quote">
+                <h3>{this.props.title}.</h3>
+                <p>{this.props.quote}</p>
+                <h5>By: {this.props.author}</h5>
+                  <span className="spanStyle">
+                      <img src="https://theysaidso.com/branding/theysaidso.png" height="20" width="20" alt="theysaidso.com"/>
+                      <a href="https://theysaidso.com" title="Powered by quotes from theysaidso.com"
+                        className="anchorStyle"
+                      >theysaidso.com</a>
+                  </span>
+            </div>
+        );
+    }
+}
 
+//BIOGRAPHY
 class Bio extends React.Component {
     render() {
         return (
@@ -414,6 +434,7 @@ class Bio extends React.Component {
     }
 }
 
+
 //SEARCHRESULTS
 class SearchResults extends React.Component {
     render() {
@@ -422,10 +443,6 @@ class SearchResults extends React.Component {
 
         if (tableBody !== null) {
             tableBody.textContent = "";
-        }
-
-        for (let i = 0; i < results.length; i++) {
-            tableBody.appendChild(results[i]);
         }
 
         return (
@@ -440,6 +457,47 @@ class SearchResults extends React.Component {
                     </thead>
                     <tbody id="tableBody">
 
+                        {
+                            this.props.results.map((result, index) => {
+                                console.log(result);
+                                if(result.searchType === "track"){
+                                    return(
+                                        <tr key={index}>
+                                            <td>{result.track}</td>
+                                            <td>{result.artist}</td>
+                                            <td>{result.album}</td>
+                                            <td>youtube</td>
+                                            <td>spotify</td>
+
+                                        </tr>
+                                        );
+                                }
+                                else if(result.searchType === "album"){
+                                    return(
+                                        <tr key={index}>
+                                            <td><img src={result.cover} alt="cover"/></td>
+                                            <td>{result.artist}</td>
+                                            <td>{result.album}</td>
+                                            <td>youtube</td>
+                                            <td>spotify</td>
+                                        </tr>
+                                        );
+                                }
+                                else if(result.searchType === "artist"){
+
+                                    return(
+                                        <tr key={index}>
+                                            <td>{result.cover}</td>
+                                            <td>{result.artist}</td>
+                                            <td></td>
+                                            <td>youtube</td>
+                                            <td>spotify</td>
+                                        </tr>
+                                        );
+                                }
+                            
+                            })
+                        }
                     </tbody>
 
                 </table>

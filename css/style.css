@@ -395,6 +395,19 @@ li {
     }
 }
 
+
+/*QOUTE*/
+.spanStyle{
+    z-index:50;
+    font-size:0.9em;
+}
+.anchorStyle{
+    color:#996A8E;
+    margin-left:4px; 
+    vertical-align: middle;
+}
+
+
 /*
 TABLE-TEST
  */
