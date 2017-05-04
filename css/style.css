@@ -411,6 +411,7 @@ table {
 
 th {
     font-weight: 500;
+    cursor: pointer;
 }
 
 td, th {
@@ -437,4 +438,5 @@ th > i {
     font-size: 24px;
     vertical-align: middle;
     padding: 0 8px 3px 0;
+    cursor: pointer;
 }

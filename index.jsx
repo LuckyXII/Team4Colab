@@ -32,6 +32,7 @@ class App extends React.Component {
         this.closeFavorites = this.closeFavorites.bind(this);
         this.removeFavorite = this.removeFavorite.bind(this);
         this.filterFavorites = this.filterFavorites.bind(this);
+        this.sortFavorites = this.sortFavorites.bind(this);
         this.findResults = this.findResults.bind(this);
         this.getArtistBio = this.getArtistBio.bind(this);
     }
@@ -107,39 +108,39 @@ class App extends React.Component {
             headerAction: ''
         });
     }
-    getArtistBio(e){
+
+    getArtistBio(e) {
         console.log("testbio");
-        let artist = e.target.textContent; 
+        let artist = e.target.textContent;
         let url = `http://ws.audioscrobbler.com/2.0/?/2.0/?method=artist.getinfo&artist=${artist}&api_key=b971e5066edbb8974e0bb47164fd33a4&format=json`;
-        
+
         fetch(url)
-        .then((response)=> {
-        	return response.json();
-        })
-        .then((result)=> {
-        	console.log(result);
-            
-            let art = result.artist;
-            let summary = art.bio.summary;
-            let img = art.image.length > 0 ? art.image[0]["#text"] : "";
-            let similar = art.similar.artist; 
-            let name = art.name;
-            let similarNames =[];
-            
-            for (let x =0; x < similar.length; x++){
-                similarNames.push(similar[x].name);
-            }
-            
-            this.setSate({
-                bioName : name,
-                bioImg : img,
-                bioSimilar : similarNames,
-                bioSummary : summary
+            .then((response) => {
+                return response.json();
+            })
+            .then((result) => {
+                console.log(result);
+
+                let art = result.artist;
+                let summary = art.bio.summary;
+                let img = art.image.length > 0 ? art.image[0]["#text"] : "";
+                let similar = art.similar.artist;
+                let name = art.name;
+                let similarNames = [];
+
+                for (let x = 0; x < similar.length; x++) {
+                    similarNames.push(similar[x].name);
+                }
+
+                this.setSate({
+                    bioName: name,
+                    bioImg: img,
+                    bioSimilar: similarNames,
+                    bioSummary: summary
+                });
             });
-        });
-            
-            
-        
+
+
     }
 
     removeFavorite(event) {
@@ -168,6 +169,65 @@ class App extends React.Component {
         this.setState({
             favorites: filteredList
         });
+    }
+
+    sortFavorites(event) {
+        let target;
+        if (event.target.attributes['data-sort'] === undefined) {
+            target = event.target.parentNode.attributes['data-sort'].value;
+        } else {
+            target = event.target.attributes['data-sort'].value
+        }
+        let getFavorites = this.state.favorites;
+        if (target === 'track') {
+            getFavorites.sort((a, b) => {
+                let aTrack = a.track.toLowerCase();
+                let bTrack = b.track.toLowerCase();
+                if (aTrack < bTrack) {
+                    return -1;
+                }
+                if (aTrack > bTrack) {
+                    return 1;
+                }
+
+                return 0;
+            });
+            this.setState({
+                favorites: getFavorites
+            })
+        } else if (target === 'artist') {
+            getFavorites.sort((a, b) => {
+                let aArtist = a.artist.toLowerCase();
+                let bArtist = b.artist.toLowerCase();
+                if (aArtist < bArtist) {
+                    return -1;
+                }
+                if (aArtist > bArtist) {
+                    return 1;
+                }
+                return 0;
+            });
+            this.setState({
+                favorites: getFavorites
+            })
+        } else if (target === 'album') {
+            getFavorites.sort((a, b) => {
+                let aAlbum = a.album.toLowerCase();
+                let bAlbum = b.album.toLowerCase();
+                if (aAlbum < bAlbum) {
+                    return -1;
+                }
+                if (aAlbum > bAlbum) {
+                    return 1;
+                }
+                return 0;
+            });
+            this.setState({
+                favorites: getFavorites
+            })
+        } else if (target === 'default') {
+            this.handleFavorites();
+        }
     }
 
     getArtistBio(e) {
@@ -355,6 +415,7 @@ class App extends React.Component {
                     favorites={this.state.favorites}
                     removeFavorite={this.removeFavorite}
                     filterInput={this.filterFavorites}
+                    sortFavorites={this.sortFavorites}
                 />
                 {/*<!-- SEARCH CONTAINER -->*/}
                 <div className="search-container">
@@ -398,7 +459,8 @@ class App extends React.Component {
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-3 col-xs-6 bio">
-                                 <Bio similar={this.state.bioSimilar} summary={this.state.bioSummary}  name={this.state.bioName} coverImg={this.state.bioImg}/>
+                                <Bio similar={this.state.bioSimilar} summary={this.state.bioSummary}
+                                     name={this.state.bioName} coverImg={this.state.bioImg}/>
                                 {/*<img src="./rescources/lastfm_black_small.gif" alt="lastFM"/>*/}
                             </div>
                         </div>
@@ -513,9 +575,14 @@ class Header extends React.Component {
                                 <table>
                                     <tbody>
                                     <tr>
-                                        <th>Track<i className="material-icons">arrow_drop_down</i></th>
-                                        <th>Artist<i className="material-icons">arrow_drop_down</i></th>
-                                        <th>Album<i className="material-icons">arrow_drop_down</i></th>
+                                        <th onClick={this.props.sortFavorites} data-sort="track">Track<i
+                                            className="material-icons">arrow_drop_down</i></th>
+                                        <th onClick={this.props.sortFavorites} data-sort="artist">Artist<i
+                                            className="material-icons">arrow_drop_down</i></th>
+                                        <th onClick={this.props.sortFavorites} data-sort="album">Album<i
+                                            className="material-icons">arrow_drop_down</i></th>
+                                        <th onClick={this.props.sortFavorites} data-sort="default">Default<i
+                                            className="material-icons">arrow_drop_down</i></th>
                                     </tr>
                                     {this.props.favorites.map((favorite, index) =>
                                         <tr key={index} data-id={favorite.id}>
