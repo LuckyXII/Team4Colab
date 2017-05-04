@@ -32,6 +32,7 @@ class App extends React.Component {
         this.closeFavorites = this.closeFavorites.bind(this);
         this.removeFavorite = this.removeFavorite.bind(this);
         this.filterFavorites = this.filterFavorites.bind(this);
+        this.sortFavorites = this.sortFavorites.bind(this);
         this.findResults = this.findResults.bind(this);
         this.getArtistBio = this.getArtistBio.bind(this);
         this.getQuotes = this.getQuotes.bind(this);
@@ -109,7 +110,8 @@ class App extends React.Component {
             headerAction: ''
         });
     }
-    getArtistBio(e){
+
+    getArtistBio(e) {
         console.log("testbio");
         let artist = e.target.textContent; 
         let url = `http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${artist}&api_key=b971e5066edbb8974e0bb47164fd33a4&format=json`;
@@ -137,11 +139,9 @@ class App extends React.Component {
                 bioImg : img,
                 bioSimilar : similarNames,
                 bioSummary : summary
+
             });
         });
-            
-            
-        
     }
 
     removeFavorite(event) {
@@ -172,6 +172,67 @@ class App extends React.Component {
         });
     }
 
+
+    sortFavorites(event) {
+        let target;
+        if (event.target.attributes['data-sort'] === undefined) {
+            target = event.target.parentNode.attributes['data-sort'].value;
+        } else {
+            target = event.target.attributes['data-sort'].value;
+        }
+        let getFavorites = this.state.favorites;
+        if (target === 'track') {
+            getFavorites.sort((a, b) => {
+                let aTrack = a.track.toLowerCase();
+                let bTrack = b.track.toLowerCase();
+                if (aTrack < bTrack) {
+                    return -1;
+                }
+                if (aTrack > bTrack) {
+                    return 1;
+                }
+
+                return 0;
+            });
+            this.setState({
+                favorites: getFavorites
+            });
+        } else if (target === 'artist') {
+            getFavorites.sort((a, b) => {
+                let aArtist = a.artist.toLowerCase();
+                let bArtist = b.artist.toLowerCase();
+                if (aArtist < bArtist) {
+                    return -1;
+                }
+                if (aArtist > bArtist) {
+                    return 1;
+                }
+                return 0;
+            });
+            this.setState({
+                favorites: getFavorites
+            });
+        } else if (target === 'album') {
+            getFavorites.sort((a, b) => {
+                let aAlbum = a.album.toLowerCase();
+                let bAlbum = b.album.toLowerCase();
+                if (aAlbum < bAlbum) {
+                    return -1;
+                }
+                if (aAlbum > bAlbum) {
+                    return 1;
+                }
+                return 0;
+            });
+            this.setState({
+                favorites: getFavorites
+            });
+        } else if (target === 'default') {
+            this.handleFavorites();
+        }
+    }
+
+
     componentDidMount() {
         
         //find quote
@@ -195,9 +256,9 @@ class App extends React.Component {
                 const database = firebase.database();
 
                 database.ref('users/' + uid + '/favorites/').push({
-                    track: 'Testar1',
-                    album: 'Testalbum1',
-                    artist: 'Testartist',
+                    track: 'Testar2',
+                    album: 'Testalbum2',
+                    artist: 'Testartist43',
                     youtube: 'YouTube',
                     spotify: 'Spotify'
                 });
@@ -343,6 +404,7 @@ class App extends React.Component {
                     favorites={this.state.favorites}
                     removeFavorite={this.removeFavorite}
                     filterInput={this.filterFavorites}
+                    sortFavorites={this.sortFavorites}
                 />
                 {/*<!-- SEARCH CONTAINER -->*/}
                 <div className="search-container">
@@ -557,17 +619,22 @@ class Header extends React.Component {
                                 <table>
                                     <tbody>
                                     <tr>
-                                        <th>Track<i className="material-icons">arrow_drop_down</i></th>
-                                        <th>Artist<i className="material-icons">arrow_drop_down</i></th>
-                                        <th>Album<i className="material-icons">arrow_drop_down</i></th>
+                                        <th onClick={this.props.sortFavorites} data-sort="track">Track<i
+                                            className="material-icons">arrow_drop_down</i></th>
+                                        <th onClick={this.props.sortFavorites} data-sort="artist">Artist<i
+                                            className="material-icons">arrow_drop_down</i></th>
+                                        <th onClick={this.props.sortFavorites} data-sort="album">Album<i
+                                            className="material-icons">arrow_drop_down</i></th>
+                                        <th onClick={this.props.sortFavorites} data-sort="default">Default<i
+                                            className="material-icons">arrow_drop_down</i></th>
                                     </tr>
                                     {this.props.favorites.map((favorite, index) =>
                                         <tr key={index} data-id={favorite.id}>
                                             <td>{favorite.track}</td>
                                             <td>{favorite.artist}</td>
                                             <td>{favorite.album}</td>
-                                            <td>{favorite.youtube}</td>
-                                            <td>{favorite.spotify}</td>
+                                            <td className="mobile-hidden">{favorite.youtube}</td>
+                                            <td className="mobile-hidden">{favorite.spotify}</td>
                                             <td><i className="material-icons" onClick={this.props.removeFavorite}>favorite</i>
                                             </td>
                                         </tr>
