@@ -112,7 +112,7 @@ class App extends React.Component {
     getArtistBio(e){
         console.log("testbio");
         let artist = e.target.textContent; 
-        let url = `http://ws.audioscrobbler.com/2.0/?/2.0/?method=artist.getinfo&artist=${artist}&api_key=b971e5066edbb8974e0bb47164fd33a4&format=json`;
+        let url = `http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${artist}&api_key=b971e5066edbb8974e0bb47164fd33a4&format=json`;
         
         fetch(url)
         .then((response)=> {
@@ -132,7 +132,7 @@ class App extends React.Component {
                 similarNames.push(similar[x].name);
             }
             
-            this.setSate({
+            this.setState({
                 bioName : name,
                 bioImg : img,
                 bioSimilar : similarNames,
@@ -376,7 +376,7 @@ class App extends React.Component {
                             <div className="col-lg-offset-3 col-lg-6 col-md-6 col-md-offset-3 col-xs-12 search">
                                 <div id="searchResults" className="search-results">
                                     {/*SEARCH RESULTS*/}
-                                    <SearchResults results={this.state.results}/>
+                                    <SearchResults getBio={this.getArtistBio} results={this.state.results}/>
                                     {/*QOUTE OF THE DAY*/}
                                     <Quote title={this.state.quoteTitle} quote={this.state.quote} author={this.state.quoteAuthor} />
                                 </div>
@@ -418,6 +418,7 @@ class Quote extends React.Component{
 //BIOGRAPHY
 class Bio extends React.Component {
     render() {
+        
         return (
             <div className="biography">
                 <img src={this.props.coverImg} alt="cover"/>
@@ -464,7 +465,7 @@ class SearchResults extends React.Component {
                                     return(
                                         <tr key={index}>
                                             <td>{result.track}</td>
-                                            <td>{result.artist}</td>
+                                            <td onClick={this.props.getBio}>{result.artist}</td>
                                             <td>{result.album}</td>
                                             <td>youtube</td>
                                             <td>spotify</td>
@@ -476,7 +477,7 @@ class SearchResults extends React.Component {
                                     return(
                                         <tr key={index}>
                                             <td><img src={result.cover} alt="cover"/></td>
-                                            <td>{result.artist}</td>
+                                            <td onClick={this.props.getBio}>{result.artist}</td>
                                             <td>{result.album}</td>
                                             <td>youtube</td>
                                             <td>spotify</td>
@@ -488,7 +489,7 @@ class SearchResults extends React.Component {
                                     return(
                                         <tr key={index}>
                                             <td>{result.cover}</td>
-                                            <td>{result.artist}</td>
+                                            <td onClick={this.props.getBio}>{result.artist}</td>
                                             <td></td>
                                             <td>youtube</td>
                                             <td>spotify</td>
