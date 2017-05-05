@@ -624,7 +624,7 @@ class AlbumTracks extends React.Component {
 
         return (
             <div className="albumTracks">
-                <img src={this.props.album.cover} alt="cover"/>
+                <img src={this.props.album.cover} alt="cover" className="album-image"/>
                 <h2>{this.props.album.artist}</h2>
                 <h3>{this.props.album.albumName}</h3>
                 <ul>
@@ -672,8 +672,8 @@ class Bio extends React.Component {
                 </div>
                 }
                 {result.status === true &&
-                <div>
-                    <img src={this.props.coverImg} alt="cover"/>
+                <div className="relative">
+                    <img src={this.props.coverImg} alt="cover" className="bio-image"/>
                     <h2>{this.props.name}</h2>
                     <div>
                         <h3>Similar Artists:</h3>
