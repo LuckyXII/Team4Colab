@@ -268,6 +268,10 @@ SUGGESTIONS
 RESULT-BOX + LYRICS + BIO
  */
 
+.lastFM{
+    border-radius: 5px;
+}
+
 .coverPic{
     width: 25px;
     height: 25px;
@@ -277,7 +281,7 @@ RESULT-BOX + LYRICS + BIO
     padding-top: 50px;
 }
 
-.lyrics {
+.albumTracks {
     background: #F7F7F8;
     border-radius: 5px;
     padding: 20px;
@@ -286,12 +290,12 @@ RESULT-BOX + LYRICS + BIO
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
-.lyrics > h3, h5 {
+.albumTracks > h2, h3 {
     text-align: center;
     font-weight: 500;
 }
 
-.lyrics > p {
+.albumTracks > p {
     font-size: .9em;
 }
 
