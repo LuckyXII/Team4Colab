@@ -679,7 +679,7 @@ class Bio extends React.Component {
                         <h3>Similar Artists:</h3>
                         <p>{this.props.similar}</p>
                         <h3>Band Biography</h3>
-                        <p>{this.props.summary}</p>
+                        <p dangerouslySetInnerHTML={{ __html: this.props.summary}}></p>
                     </div>
                     <img className="lastFM" src="./rescources/lastfm_black_small.gif" alt="lastFM"/>
                 </div>

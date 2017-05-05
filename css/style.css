@@ -334,6 +334,11 @@ RESULT-BOX + LYRICS + BIO
     font-size: .9em;
 }
 
+.biography > div > div > p > a {
+    display: block;
+    margin: 10px 0 0 0;
+}
+
 li > span {
     padding-right: 25px;
 }
