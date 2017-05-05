@@ -23,7 +23,13 @@ class App extends React.Component {
             bioName: "",
             bioSimilar: [],
             bioSummary: "",
-            bioImg: ""
+            bioImg: "",
+            bioDone: false,
+            searchVal: "",
+            radioVal: "track",
+            album: {albumTracks: [""]},
+           
+            
         };
 
         this.handleLogIn = this.handleLogIn.bind(this);
@@ -36,6 +42,12 @@ class App extends React.Component {
         this.findResults = this.findResults.bind(this);
         this.getArtistBio = this.getArtistBio.bind(this);
         this.getQuotes = this.getQuotes.bind(this);
+        this.sendToFavorites = this.sendToFavorites.bind(this);
+        this.searchInput = this.searchInput.bind(this);
+        this.searchType = this.searchType.bind(this);
+        this.sortSearch = this.sortSearch.bind(this);
+        this.getAlbumTracks = this.getAlbumTracks.bind(this);
+        this.spotifyPreview = this.spotifyPreview.bind(this);
 
     }
 
@@ -44,7 +56,6 @@ class App extends React.Component {
 
         firebase.auth().signInWithPopup(provider).then(result => {
             let user = result.user;
-            console.log(user);
             this.setState({
                 loggedIn: true,
                 user: {
@@ -60,7 +71,6 @@ class App extends React.Component {
 
     handleLogOut() {
         firebase.auth().signOut().then(() => {
-            console.log('Du är utloggad.');
             this.setState({
                 loggedIn: false
             });
@@ -68,9 +78,64 @@ class App extends React.Component {
             console.log(error);
         });
     }
+    
+    //BIOGRAPHY
+    getArtistBio(e) {
+        let artist = e.target.textContent; 
+        let url = `http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${artist}&api_key=b971e5066edbb8974e0bb47164fd33a4&format=json`;
+        
+        fetch(url)
+        .then((response)=> {
+            this.setState({bioDone: false});
+        	return response.json();
+        })
+        .then((result)=> {
+            console.log(result);
+            let art = result.artist;
+            let summary = art.bio.summary;
+            let img = art.image.length > 0 ? art.image[0]["#text"] : "";
+            let similar = art.similar.artist; 
+            let name = art.name;
+            let similarNames =[];
+            
+            for (let x =0; x < similar.length; x++){
+                similarNames.push(similar[x].name);
+            }
+            
+            this.setState({
+                bioName : name,
+                bioImg : img,
+                bioSimilar : similarNames,
+                bioSummary : summary,
+                bioDone: true
 
+            });
+        });
+    }
+    
+    //SENDTOFAVORITES
+    sendToFavorites(e){
+        let par = e.target.parentNode.parentNode;
+        let track = par.children[0].textContent;
+        let artist = par.children[1].textContent;
+        let album = par.children[2].textContent;
+        
+        
+        let uid = this.state.user.uid;
+        const database = firebase.database();
+
+        database.ref('users/' + uid + '/favorites/').push({
+            track: track,
+            album: album,
+            artist: artist,
+            youtube: 'YouTube',
+            spotify: 'Spotify'
+        });
+        
+    }
+    
+    //HANDLE FAVORITES
     handleFavorites() {
-        console.log('klick');
         this.setState({
             headerAction: 'favorites'
         });
@@ -94,70 +159,32 @@ class App extends React.Component {
                 favorites: allFavorites,
                 originalFavorites: allFavorites
             });
-            /*
-             setTimeout(() => {
-             console.log('state', this.state.favorites);
-             this.state.favorites.map(favorite => {
-             console.log('map', favorite);
-             });
-             }, 1);
-             */
         });
     }
 
+    
+    
+    //CLOSE FAVORITES
     closeFavorites() {
         this.setState({
             headerAction: ''
         });
     }
-
-    getArtistBio(e) {
-        console.log("testbio");
-        let artist = e.target.textContent; 
-        let url = `http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${artist}&api_key=b971e5066edbb8974e0bb47164fd33a4&format=json`;
-        
-        fetch(url)
-        .then((response)=> {
-        	return response.json();
-        })
-        .then((result)=> {
-        	console.log(result);
-            
-            let art = result.artist;
-            let summary = art.bio.summary;
-            let img = art.image.length > 0 ? art.image[0]["#text"] : "";
-            let similar = art.similar.artist; 
-            let name = art.name;
-            let similarNames =[];
-            
-            for (let x =0; x < similar.length; x++){
-                similarNames.push(similar[x].name);
-            }
-            
-            this.setState({
-                bioName : name,
-                bioImg : img,
-                bioSimilar : similarNames,
-                bioSummary : summary
-
-            });
-        });
-    }
-
+    
+    //REMOVE FAVORITES
     removeFavorite(event) {
         let targetId = event.target.parentNode.parentNode.attributes['data-id'].value;
-        console.log(targetId);
         const database = firebase.database();
         database.ref('users/' + this.state.user.uid + '/favorites/' + targetId).set(null);
     }
-
+    
+    //FILTER FAVORITES
     filterFavorites(event) {
         this.setState({
             filterFavorites: event.target.value
         });
 
         let allFavorites = this.state.originalFavorites;
-        //console.log(allFavorites);
         let filteredList = [];
         allFavorites.filter(obj => {
             if (obj.track.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1 ||
@@ -166,13 +193,12 @@ class App extends React.Component {
                 filteredList.push(obj);
             }
         });
-        console.log(filteredList);
         this.setState({
             favorites: filteredList
         });
     }
 
-
+    // SORT FAVORITS
     sortFavorites(event) {
         let target;
         if (event.target.attributes['data-sort'] === undefined) {
@@ -232,7 +258,7 @@ class App extends React.Component {
         }
     }
 
-
+    //COMPONENT DID MOUNT
     componentDidMount() {
         
         //find quote
@@ -242,7 +268,6 @@ class App extends React.Component {
         firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
                 // User is signed in.
-                console.log(user);
                 _this.setState({
                     loggedIn: true,
                     user: {
@@ -250,17 +275,6 @@ class App extends React.Component {
                         photo: user.photoURL,
                         uid: user.uid
                     }
-                });
-
-                let uid = user.uid;
-                const database = firebase.database();
-
-                database.ref('users/' + uid + '/favorites/').push({
-                    track: 'Testar2',
-                    album: 'Testalbum2',
-                    artist: 'Testartist43',
-                    youtube: 'YouTube',
-                    spotify: 'Spotify'
                 });
                 // ...
             } else {
@@ -281,7 +295,6 @@ class App extends React.Component {
         	return response.json();
         })
         .then((result)=> {
-        	console.log(result); 
             
             let quote = result.contents.quotes[0];
             let title = quote.title;
@@ -297,32 +310,78 @@ class App extends React.Component {
         });
         
     }
+    
+    //SORTSEARCH
+    sortSearch(event){
+        let target;
+        if (event.target.attributes['data-sort'] === undefined) {
+            target = event.target.parentNode.attributes['data-sort'].value;
+        } else {
+            target = event.target.attributes['data-sort'].value;
+        }
+        let getResults = this.state.results;
+        if (target === 'track') {
+            getResults.sort((a, b) => {
+                let aTrack = a.track.toLowerCase();
+                let bTrack = b.track.toLowerCase();
+                if (aTrack < bTrack) {
+                    return -1;
+                }
+                if (aTrack > bTrack) {
+                    return 1;
+                }
+
+                return 0;
+            });
+            this.setState({
+                results: getResults
+            });
+        } else if (target === 'artist') {
+            getResults.sort((a, b) => {
+                let aArtist = a.artist.toLowerCase();
+                let bArtist = b.artist.toLowerCase();
+                if (aArtist < bArtist) {
+                    return -1;
+                }
+                if (aArtist > bArtist) {
+                    return 1;
+                }
+                return 0;
+            });
+            this.setState({
+                results: getResults
+            });
+        } else if (target === 'album') {
+            getResults.sort((a, b) => {
+                let aAlbum = a.album.toLowerCase();
+                let bAlbum = b.album.toLowerCase();
+                if (aAlbum < bAlbum) {
+                    return -1;
+                }
+                if (aAlbum > bAlbum) {
+                    return 1;
+                }
+                return 0;
+            });
+            this.setState({
+                results: getResults
+            });
+        }
+    }
 
     //FINDRESULTS
     findResults() {
-        let searchInput = document.getElementById("main-search");
-        let searchType;
-        let inputValue = "";
+        
+        let searchType = this.state.radioVal;
         let title = "";
         let artist = "";
         let album = "";
         let cover = "";
-        let resultTable = [];
+        let resultTable = [];     
+        let preview = "";
+        let openSpotify = "";
 
-        //if empty search
-        if (searchInput !== "") {
-            inputValue = searchInput.value;
-        }
-
-        //check for selected radioBtn
-        for (let i = 0; i < radioBtns.length; i++) {
-            if (radioBtns[i].checked === true) {
-                searchType = radioBtns[i].value;
-            }
-
-        }
-
-        let url = `https://api.spotify.com/v1/search?q=${inputValue}&type=${searchType}&limit=5`;
+        let url = `https://api.spotify.com/v1/search?q=${this.state.searchVal}&type=${searchType}&limit=5`;
 
         fetch(url)
             .then((response) => {
@@ -330,7 +389,6 @@ class App extends React.Component {
             })
             .then((result) => {
                 console.log(result);
-
                 //Track
                 if (searchType === "track") {
 
@@ -340,8 +398,18 @@ class App extends React.Component {
                         title = tracks[i].name;
                         artist = tracks[i].artists[0].name;
                         album = tracks[i].album.name;
+                        preview= tracks[i].preview_url;
+                        openSpotify = tracks[i].external_urls.spotify;
 
-                        let obj = {searchType:searchType,track:title,artist:artist,album:album};
+                        let obj = {
+                            openSpotify: openSpotify,
+                            preview:preview,
+                            searchType:searchType,
+                            track:title,
+                            artist:artist,
+                            album:album
+                        };
+                        
                         resultTable.push(obj);
 
                     }
@@ -353,12 +421,18 @@ class App extends React.Component {
 
                     for (let i = 0; i < artists.length; i++) {
                         artist = artists[i].name;
+                        openSpotify = artists[i].external_urls.spotify;
 
                         if (artists[i].images.length !== 0) {
                             cover = artists[i].images[0].url;
                         }
                         
-                        let obj = {searchType:searchType,cover:cover,artist:artist};
+                        let obj = {
+                            openSpotify: openSpotify,
+                            searchType:searchType,
+                            cover:cover,
+                            artist:artist
+                        };
                         resultTable.push(obj);
                     }
 
@@ -367,28 +441,95 @@ class App extends React.Component {
                 //Album
                 else if (searchType === "album") {
                     let albums = result.albums.items;
+                    
 
                     for (let i = 0; i < albums.length; i++) {
                         artist = albums[i].artists[0].name;
                         album = albums[i].name;
+                        openSpotify = albums[i].external_urls.spotify;
 
                         if (albums[i].images.length !== 0) {
                             cover = albums[i].images[0].url;
                         }
-                        let obj = {searchType:searchType,cover:cover,artist:artist,album:album};
+                        let obj = {openSpotify: openSpotify,
+                                   searchType:searchType,
+                                   cover:cover,
+                                   artist:artist,
+                                   album:album
+                                  };
                         resultTable.push(obj);
                     }
 
                 }
 
 
-                inputValue = "";
-                searchInput.value = "";
+                
 
                 this.setState({results: resultTable});
             });
     }//END FINDRESULTS
+    
+    //SEARCH INPUT
+    searchInput(e){
+        let val = e.target.value;
+        this.setState({searchVal: val});
+    }
+    
+    //SEARCHTYPE
+    searchType(e){
+        let val = e.target;
+        this.setState({radioVal: val.value,
+                      checked: true});
+    }
+    
+    //GET ALBUM TRACKS
+    getAlbumTracks(e){
+        let res = e.target.parentNode;
+        let album = encodeURIComponent(res.children[2].textContent);
+        let artist = encodeURIComponent(res.children[1].textContent);
+        
+        let url =  `http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=b971e5066edbb8974e0bb47164fd33a4&artist=${artist}&album=${album}&format=json`;
+        console.log(url);
+        
+        fetch(url)
+        .then((response)=> {
+        	return response.json();
+        })
+        .then((result)=> {
+        	console.log(result);
+            
+            let res = result.album;
+            let albumName = res.name;
+            let artist = res.artist;
+            let cover = res.image[0]["#text"];
+            let tracks = res.tracks.track;
+            let albumTracks = [];
+            
+            for(let i = 0; i < tracks.length; i++){
+                albumTracks.push(tracks[i].name); 
+            }
+            
+            this.setState({album:{
+                albumName: albumName,
+                artist: artist,
+                cover: cover,
+                albumTracks: albumTracks
+            }});
+        });
+        
+    }
+    
+    spotifyPreview(e){
+        
+       /* audioObject.pause();
+        let url = e.target.attributes[0].value;
+        var audio = new Audio(url);
+        this.setState({playing:audio});
+        this.state.playing.play();
+        */
+    }
 
+    //RENDER
     render() {
         return (
             <div className="container-fluid">
@@ -405,21 +546,23 @@ class App extends React.Component {
                     removeFavorite={this.removeFavorite}
                     filterInput={this.filterFavorites}
                     sortFavorites={this.sortFavorites}
+                    getAlbum={this.getAlbumTracks}
+                    getBio ={this.getArtistBio}
                 />
                 {/*<!-- SEARCH CONTAINER -->*/}
                 <div className="search-container">
                     <h1>Search for music</h1>
                     <form className="radio">
-                        <input type="radio" name="type" value="track" id="track" className="radio-btn"/>
+                        <input onChange={this.searchType} type="radio" name="type" value="track" id="track" className="radio-btn" checked={this.state.radioVal === "track"}/>
                         <label htmlFor="track" className="radio-label">Track</label>
-                        <input type="radio" name="type" value="album" id="album" className="radio-btn"/>
+                        <input onChange={this.searchType} type="radio" name="type" value="album" id="album" className="radio-btn" checked={this.state.radioVal === "album"}/>
                         <label htmlFor="album" className="radio-label">Album</label>
-                        <input type="radio" name="type" value="artist" id="artist" className="radio-btn"/>
+                        <input onChange={this.searchType} type="radio" name="type" value="artist" id="artist" className="radio-btn" checked={this.state.radioVal === "artist"}/>
                         <label htmlFor="artist" className="radio-label">Artist</label>
                     </form>
                     <div className="search-field-container">
                         {/*<!-- SEARCH INPUT -->*/}
-                        <input type="text" id="main-search" placeholder="Search"/>
+                        <input onChange={this.searchInput} type="text" id="main-search" placeholder="Search" value={this.state.searchVal}/>
                         <i onClick={this.findResults} id="searchBtn" className="material-icons">search</i>
                         {/*<!--<button type="button" className="btn">Search</button>-->*/}
                         {/*<div className="suggestions">
@@ -435,17 +578,27 @@ class App extends React.Component {
                     {/* <!-- Boxen som visas när man har sökt -->*/}
                     <div className="results-container">
                         <div className="row">
-                            <div className="col-lg-offset-3 col-lg-6 col-md-6 col-md-offset-3 col-xs-12 search">
+                            <div className="col-lg-3 col-md-3 col-xs-6 lyric"> 
+                                <AlbumTracks album={this.state.album} />
+                            </div>
+                            <div className=" col-lg-6 col-md-6 col-xs-12 search">
                                 <div id="searchResults" className="search-results">
                                     {/*SEARCH RESULTS*/}
-                                    <SearchResults getBio={this.getArtistBio} results={this.state.results}/>
+                                    <SearchResults 
+                                        sortResults={this.sortSearch} 
+                                        sendFav={this.sendToFavorites} 
+                                        getBio={this.getArtistBio} 
+                                        results={this.state.results} 
+                                        getAlbum={this.getAlbumTracks}
+                                        preview={this.spotifyPreview}
+                                    />
                                     {/*QOUTE OF THE DAY*/}
                                     <Quote title={this.state.quoteTitle} quote={this.state.quote} author={this.state.quoteAuthor} />
                                 </div>
                             </div>
                             <div className="col-lg-3 col-md-3 col-xs-6 bio">
                                  {/*BIOGRAPHY*/}
-                                 <Bio similar={this.state.bioSimilar} summary={this.state.bioSummary}  name={this.state.bioName} coverImg={this.state.bioImg}/>
+                                 <Bio status={this.state.bioDone} similar={this.state.bioSimilar} summary={this.state.bioSummary}  name={this.state.bioName} coverImg={this.state.bioImg}/>
                             </div>
                         </div>
                     </div>
@@ -456,22 +609,43 @@ class App extends React.Component {
 }
 //END APP
 
+class AlbumTracks extends React.Component{
+    render(){
+        
+        
+        return(
+            <div className="albumTracks">
+                <img src={this.props.album.cover} alt="cover"/>
+                <h2>{this.props.album.artist}</h2>
+                <h3>{this.props.album.albumName}</h3>
+                <ul>
+                    {this.props.album.albumTracks.map((track, index)=>{
+                        return(
+                            <li key={index}>{track}</li>
+                        );
+                    })}
+                </ul>
+                <img className = "lastFM" src="./rescources/lastfm_black_small.gif" alt="lastFM"/>
+            </div>
+        );
+    }
+}
+
 //QUOTES
 class Quote extends React.Component{
     render(){
-        
-        console.log(this.props);        
+          
         return(
             <div className="quote">
                 <h3>{this.props.title}.</h3>
                 <p>{this.props.quote}</p>
                 <h5>By: {this.props.author}</h5>
-                  <span className="spanStyle">
+                 {/*<span className="spanStyle">
                       <img src="https://theysaidso.com/branding/theysaidso.png" height="20" width="20" alt="theysaidso.com"/>
                       <a href="https://theysaidso.com" title="Powered by quotes from theysaidso.com"
                         className="anchorStyle"
                       >theysaidso.com</a>
-                  </span>
+                  </span>*/}
             </div>
         );
     }
@@ -480,18 +654,27 @@ class Quote extends React.Component{
 //BIOGRAPHY
 class Bio extends React.Component {
     render() {
-        
+        let result = this.props;
         return (
             <div className="biography">
-                <img src={this.props.coverImg} alt="cover"/>
-                <h2>{this.props.name}</h2>
-                <div>
-                    <h3>Similar Artists:</h3>
-                    <p>{this.props.similar}</p>
-                    <h3>Band Biography</h3>
-                    <p>{this.props.summary}</p>
-                </div>
-                <img src="./rescources/lastfm_black_small.gif" alt="lastFM"/>
+                {result.status === false &&
+                    <div>
+                      <h3>Loading...</h3>
+                    </div>
+                }
+                {result.status === true &&
+                    <div>
+                        <img src={this.props.coverImg} alt="cover"/>
+                        <h2>{this.props.name}</h2>
+                        <div>
+                            <h3>Similar Artists:</h3>
+                            <p>{this.props.similar}</p>
+                            <h3>Band Biography</h3>
+                            <p>{this.props.summary}</p>
+                        </div>
+                        <img className = "lastFM" src="./rescources/lastfm_black_small.gif" alt="lastFM"/>
+                    </div>
+                }
             </div>
         );
     }
@@ -502,47 +685,63 @@ class Bio extends React.Component {
 class SearchResults extends React.Component {
     render() {
         let results = this.props.results;
-        let tableBody = document.getElementById("tableBody");
-
-        if (tableBody !== null) {
-            tableBody.textContent = "";
+        let searchType;
+        if(results.length > 0){
+            searchType = results[0].searchType;
         }
 
         return (
             <div className="table-container">
                 <table id="resultTable">
                     <thead>
-                    <tr>
-                        <th>Track<i className="material-icons">arrow_drop_down</i></th>
-                        <th>Artist<i className="material-icons">arrow_drop_down</i></th>
-                        <th>Album<i className="material-icons">arrow_drop_down</i></th>
-                    </tr>
+                        {searchType === "track" &&
+                             <tr>
+                                <th onClick={this.props.sortResults} data-sort="track">Track<i className="material-icons">arrow_drop_down</i></th>
+                                <th onClick={this.props.sortResults} data-sort="artist" >Artist<i className="material-icons">arrow_drop_down</i></th>
+                                <th onClick={this.props.sortResults} data-sort="album">Album<i className="material-icons">arrow_drop_down</i></th>
+                            </tr>
+                        }
+                        {searchType === "artist" &&
+                            <tr>
+                                <th>Cover</th>
+                                <th onClick={this.props.sortResults} data-sort="artist">Artist<i className="material-icons">arrow_drop_down</i></th>
+                            </tr>
+                        }
+                        {searchType === "album" &&
+                            <tr>
+                                <th>Cover</th>
+                                <th onClick={this.props.sortResults} data-sort="artist">Artist<i className="material-icons">arrow_drop_down</i></th>
+                                <th onClick={this.props.sortResults} data-sort="album">Album<i className="material-icons">arrow_drop_down</i></th>
+                            </tr>
+                            
+                        }
+                   
                     </thead>
-                    <tbody id="tableBody">
+                    <tbody>
 
                         {
                             this.props.results.map((result, index) => {
-                                console.log(result);
+                               
                                 if(result.searchType === "track"){
                                     return(
                                         <tr key={index}>
                                             <td>{result.track}</td>
                                             <td onClick={this.props.getBio}>{result.artist}</td>
-                                            <td>{result.album}</td>
+                                            <td onClick={this.props.getAlbum}>{result.album}</td>
                                             <td>youtube</td>
-                                            <td>spotify</td>
-
+                                            <td onClick={this.props.preview} data-preview={result.preview}>spotify</td>
+                                            <td><i onClick={this.props.sendFav} className="material-icons">favorite_border</i></td>
                                         </tr>
                                         );
                                 }
                                 else if(result.searchType === "album"){
                                     return(
                                         <tr key={index}>
-                                            <td><img src={result.cover} alt="cover"/></td>
+                                            <td><img src={result.cover} alt="cover" className="coverPic"/></td>
                                             <td onClick={this.props.getBio}>{result.artist}</td>
-                                            <td>{result.album}</td>
+                                            <td onClick={this.props.getAlbum}>{result.album}</td>
                                             <td>youtube</td>
-                                            <td>spotify</td>
+                                            <td onClick={this.props.preview}>spotify</td>
                                         </tr>
                                         );
                                 }
@@ -550,11 +749,11 @@ class SearchResults extends React.Component {
 
                                     return(
                                         <tr key={index}>
-                                            <td>{result.cover}</td>
+                                            <td><img src={result.cover} alt="cover" className="coverPic"/></td>
                                             <td onClick={this.props.getBio}>{result.artist}</td>
                                             <td></td>
                                             <td>youtube</td>
-                                            <td>spotify</td>
+                                            <td onClick={this.props.preview}>spotify</td>
                                         </tr>
                                         );
                                 }
@@ -631,8 +830,8 @@ class Header extends React.Component {
                                     {this.props.favorites.map((favorite, index) =>
                                         <tr key={index} data-id={favorite.id}>
                                             <td>{favorite.track}</td>
-                                            <td>{favorite.artist}</td>
-                                            <td>{favorite.album}</td>
+                                            <td onClick={this.props.getBio}>{favorite.artist}</td>
+                                            <td onClick={this.props.getAlbum}>{favorite.album}</td>
                                             <td className="mobile-hidden">{favorite.youtube}</td>
                                             <td className="mobile-hidden">{favorite.spotify}</td>
                                             <td><i className="material-icons" onClick={this.props.removeFavorite}>favorite</i>
@@ -651,90 +850,6 @@ class Header extends React.Component {
             );
         }
     }
-
-    /*
-     {<!----------------------------------->
-     <!-- Favoriter -->}
-     <div className="log-in-container">
-     <div className="user-box">
-     <img src="http://placehold.it/50x50" alt="" className="profile-picture"/>
-     <h4>Robert Åhlund</h4>
-     <i className="material-icons">close</i>
-     <hr className="divider"/>
-     <h3>Favorites</h3>
-     <div className="favorite-search-wrap">
-     <input type="text" className="filter-favorites" placeholder="Search"/>
-     <i className="material-icons">search</i>
-     </div>
-     <div className="table-container">
-     <table>
-     <tbody>
-     <tr>
-     <th>Track<i className="material-icons">arrow_drop_down</i></th>
-     <th>Artist<i className="material-icons">arrow_drop_down</i></th>
-     <th>Album<i className="material-icons">arrow_drop_down</i></th>
-     </tr>
-     <tr className="active">
-     <td>Låttitel</td>
-     <td>Artist</td>
-     <td>Album</td>
-     <td>YouTube</td>
-     <td>Spotify</td>
-     <td>Lyrics</td>
-     <td><i className="material-icons">favorite</i></td>
-     </tr>
-     <tr>
-     <td>Låttitel</td>
-     <td>Artist</td>
-     <td>Album</td>
-     <td>YouTube</td>
-     <td>Spotify</td>
-     <td>Lyrics</td>
-     <td><i className="material-icons">favorite</i></td>
-     </tr>
-     <tr>
-     <td>Låttitel</td>
-     <td>Artist</td>
-     <td>Album</td>
-     <td>YouTube</td>
-     <td>Spotify</td>
-     <td>Lyrics</td>
-     <td><i className="material-icons">favorite</i></td>
-     </tr>
-     <tr>
-     <td>Låttitel</td>
-     <td>Artist</td>
-     <td>Album</td>
-     <td>YouTube</td>
-     <td>Spotify</td>
-     <td>Lyrics</td>
-     <td><i className="material-icons">favorite</i></td>
-     </tr>
-     <tr>
-     <td>Låttitel</td>
-     <td>Artist</td>
-     <td>Album</td>
-     <td>YouTube</td>
-     <td>Spotify</td>
-     <td>Lyrics</td>
-     <td><i className="material-icons">favorite</i></td>
-     </tr>
-     <tr>
-     <td>Låttitel</td>
-     <td>Artist</td>
-     <td>Album</td>
-     <td>YouTube</td>
-     <td>Spotify</td>
-     <td>Lyrics</td>
-     <td><i className="material-icons">favorite</i></td>
-     </tr>
-     </tbody>
-     </table>
-     </div>
-     </div>
-     </div>
-     {<!----------------------------------->}
-     */
 }
 
 
@@ -751,38 +866,5 @@ ReactDOM.render(<App/>, AppComp);
 //=======================================================
 //CALLBACKS
 
-
-//=======================================================
-//FIREBASE
-/*
- //Login / logout
- var provider = new firebase.auth.GithubAuthProvider();
-
- logInButton.addEventListener('click', () => {
- firebase.auth().signInWithPopup(provider).then(result => {
- let user = result.user;
- console.log(user);
- console.log(userContainer);
- userContainer.innerHTML = `<div className="user-box">
- <img src=${user.photoURL} alt="" className="profile-picture">
- <h4>${user.displayName}</h4>
- <hr className="divider">
- <span className="favorites"><i className="material-icons">favorite_border</i>Favorites</span>
- <span className="log-out" id="log-out">Log out</span>
- </div>`;
- document.getElementById('log-out').addEventListener('click', () => {
- firebase.auth().signOut().then(() => {
- console.log('Du är utloggad.');
- userContainer.innerHTML = `<button type="button" className="btn" id="log-in">Log in</button>`;
- }).catch(error => {
- console.log(error);
- });
- });
- }).catch(error => {
- console.log(error);
- });
- });
- //END login/logout
- */
 //=======================================================
 //FUNCTIONS
