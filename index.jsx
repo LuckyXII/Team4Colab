@@ -162,7 +162,7 @@ class App extends React.Component {
             if (obj.track.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1 ||
                 obj.artist.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1 ||
                 obj.album.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1) {
-                filteredList.push(obj)
+                filteredList.push(obj);
             }
         });
         console.log(filteredList);
