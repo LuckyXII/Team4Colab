@@ -273,8 +273,12 @@ RESULT-BOX + LYRICS + BIO
 }
 
 .coverPic{
-    width: 25px;
-    height: 25px;
+    width: 30px;
+    height: 30px;
+    border-radius: 3px;
+    padding: 0;
+    margin: 0;
+    vertical-align: middle;
 }
 
 .results-container {
@@ -288,6 +292,19 @@ RESULT-BOX + LYRICS + BIO
     margin: 20px 0 0 0;
     color: #996A8E;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    position: relative;
+}
+
+.albumTracks > .album-image {
+    position: absolute;
+    left: 40px;
+    top: 35px;
+    border-radius: 25px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+.albumTracks > ul > li {
+    padding: 3px 5px 3px 5px;
 }
 
 .albumTracks > h2, h3 {
@@ -332,6 +349,23 @@ RESULT-BOX + LYRICS + BIO
 
 .biography > p {
     font-size: .9em;
+}
+
+.relative {
+    position: relative;
+}
+
+.relative > .bio-image {
+    position: absolute;
+    top: -3px;
+    left: 15px;
+    border-radius: 25px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+.biography > .relative > div > p > a {
+    display: block;
+    margin: 10px 0 0 0;
 }
 
 li > span {
@@ -399,6 +433,24 @@ li {
     }
     .mobile-hidden {
         display: none;
+    }
+
+}
+
+@media only screen and (max-width: 48em) {
+    th {
+        display: none;
+    }
+
+    td {
+        display: block;
+    }
+
+    td:before {
+        content: attr(data-th) ": ";
+        font-weight: bold;
+        width: 6.5em;
+        display: inline-block;
     }
 }
 

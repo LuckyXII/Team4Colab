@@ -584,10 +584,7 @@ class App extends React.Component {
                     {/* <!-- Boxen som visas när man har sökt -->*/}
                     <div className="results-container">
                         <div className="row">
-                            <div className="col-lg-3 col-md-3 col-xs-6 lyric">
-                                <AlbumTracks album={this.state.album}/>
-                            </div>
-                            <div className=" col-lg-6 col-md-6 col-xs-12 search">
+                            <div className="col-lg-8 col-md-10 col-xs-12 col-lg-offset-2 col-md-offset-1 search">
                                 <div id="searchResults" className="search-results">
                                     {/*SEARCH RESULTS*/}
                                     <SearchResults
@@ -603,7 +600,10 @@ class App extends React.Component {
                                            author={this.state.quoteAuthor}/>
                                 </div>
                             </div>
-                            <div className="col-lg-3 col-md-3 col-xs-6 bio">
+                            <div className="col-lg-4 col-md-5 col-xs-12 col-lg-offset-2 col-md-offset-1 lyric">
+                                <AlbumTracks album={this.state.album}/>
+                            </div>
+                            <div className="col-lg-4 col-md-5 col-xs-12 bio">
                                 {/*BIOGRAPHY*/}
                                 <Bio status={this.state.bioDone} similar={this.state.bioSimilar}
                                      summary={this.state.bioSummary} name={this.state.bioName}
@@ -625,7 +625,7 @@ class AlbumTracks extends React.Component {
 
         return (
             <div className="albumTracks">
-                <img src={this.props.album.cover} alt="cover"/>
+                <img src={this.props.album.cover} alt="cover" className="album-image"/>
                 <h2>{this.props.album.artist}</h2>
                 <h3>{this.props.album.albumName}</h3>
                 <ul>
@@ -673,14 +673,14 @@ class Bio extends React.Component {
                 </div>
                 }
                 {result.status === true &&
-                <div>
-                    <img src={this.props.coverImg} alt="cover"/>
+                <div className="relative">
+                    <img src={this.props.coverImg} alt="cover" className="bio-image"/>
                     <h2>{this.props.name}</h2>
                     <div>
                         <h3>Similar Artists:</h3>
                         <p>{this.props.similar}</p>
                         <h3>Band Biography</h3>
-                        <p>{this.props.summary}</p>
+                        <p dangerouslySetInnerHTML={{__html: this.props.summary}}></p>
                     </div>
                     <img className="lastFM" src="./rescources/lastfm_black_small.gif" alt="lastFM"/>
                 </div>
@@ -741,24 +741,26 @@ class SearchResults extends React.Component {
                             if (result.searchType === "track") {
                                 return (
                                     <tr key={index}>
-                                        <td>{result.track}</td>
-                                        <td onClick={this.props.getBio}>{result.artist}</td>
-                                        <td onClick={this.props.getAlbum}>{result.album}</td>
-                                        <td>youtube</td>
-                                        <td onClick={this.props.preview} data-preview={result.preview}>spotify</td>
-                                        <td><i onClick={this.props.sendFav}
-                                               className="material-icons">favorite_border</i></td>
+                                        <td data-th="Track">{result.track}</td>
+                                        <td data-th="Artist" onClick={this.props.getBio}>{result.artist}</td>
+                                        <td data-th="Album" onClick={this.props.getAlbum}>{result.album}</td>
+                                        <td data-th="Preview">youtube</td>
+                                        <td data-th="Spotify" onClick={this.props.preview}
+                                            data-preview={result.preview}>spotify
+                                        </td>
+                                        <td data-th="Favorite"><i onClick={this.props.sendFav}
+                                                                  className="material-icons">favorite</i></td>
                                     </tr>
                                 );
                             }
                             else if (result.searchType === "album") {
                                 return (
                                     <tr key={index}>
-                                        <td><img src={result.cover} alt="cover" className="coverPic"/></td>
-                                        <td onClick={this.props.getBio}>{result.artist}</td>
-                                        <td onClick={this.props.getAlbum}>{result.album}</td>
-                                        <td>youtube</td>
-                                        <td onClick={this.props.preview}>spotify</td>
+                                        <td data-th="Cover"><img src={result.cover} alt="cover" className="coverPic"/></td>
+                                        <td data-th="Artist" onClick={this.props.getBio}>{result.artist}</td>
+                                        <td data-th="Album" onClick={this.props.getAlbum}>{result.album}</td>
+                                        <td data-th="Preview">youtube</td>
+                                        <td data-th="Spotify" onClick={this.props.preview}>spotify</td>
                                     </tr>
                                 );
                             }
@@ -766,11 +768,10 @@ class SearchResults extends React.Component {
 
                                 return (
                                     <tr key={index}>
-                                        <td><img src={result.cover} alt="cover" className="coverPic"/></td>
-                                        <td onClick={this.props.getBio}>{result.artist}</td>
-                                        <td></td>
-                                        <td>youtube</td>
-                                        <td onClick={this.props.preview}>spotify</td>
+                                        <td data-th="Cover"><img src={result.cover} alt="cover" className="coverPic"/></td>
+                                        <td data-th="Artist" onClick={this.props.getBio}>{result.artist}</td>
+                                        <td data-th="Preview">youtube</td>
+                                        <td data-th="Spotify" onClick={this.props.preview}>spotify</td>
                                     </tr>
                                 );
                             }
@@ -809,7 +810,7 @@ class Header extends React.Component {
                             <h4>{this.props.userName}</h4>
                             <hr className="divider"/>
                             <span className="favorites" onClick={this.props.handleFavorites}><i
-                                className="material-icons">favorite_border</i>Favorites</span>
+                                className="material-icons">favorite</i>Favorites</span>
                             <span className="log-out" id="log-out" onClick={this.props.handleLogOut}>Log out</span>
                         </div>
                     </div>
@@ -846,12 +847,12 @@ class Header extends React.Component {
                                     </tr>
                                     {this.props.favorites.map((favorite, index) =>
                                         <tr key={index} data-id={favorite.id}>
-                                            <td>{favorite.track}</td>
-                                            <td onClick={this.props.getBio}>{favorite.artist}</td>
-                                            <td onClick={this.props.getAlbum}>{favorite.album}</td>
-                                            <td className="mobile-hidden">{favorite.youtube}</td>
-                                            <td className="mobile-hidden">{favorite.spotify}</td>
-                                            <td><i className="material-icons" onClick={this.props.removeFavorite}>favorite</i>
+                                            <td data-th="Track">{favorite.track}</td>
+                                            <td data-th="Artist" onClick={this.props.getBio}>{favorite.artist}</td>
+                                            <td data-th="Album" onClick={this.props.getAlbum}>{favorite.album}</td>
+                                            <td data-th="Preview">{favorite.youtube}</td>
+                                            <td data-th="Spotify">{favorite.spotify}</td>
+                                            <td data-th="Remove"><i className="material-icons" onClick={this.props.removeFavorite}>favorite</i>
                                             </td>
                                         </tr>
                                     )}
