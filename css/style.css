@@ -434,6 +434,24 @@ li {
     .mobile-hidden {
         display: none;
     }
+
+}
+
+@media only screen and (max-width: 48em) {
+    th {
+        display: none;
+    }
+
+    td {
+        display: block;
+    }
+
+    td:before {
+        content: attr(data-th) ": ";
+        font-weight: bold;
+        width: 6.5em;
+        display: inline-block;
+    }
 }
 
 
