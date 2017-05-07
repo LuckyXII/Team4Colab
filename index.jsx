@@ -93,7 +93,7 @@ class App extends React.Component {
                 console.log(result);
                 let art = result.artist;
                 let summary = art.bio.summary;
-                let img = art.image.length > 0 ? art.image[0]["#text"] : "";
+                let img = art.image.length > 0 ? art.image[1]["#text"] : "";
                 let similar = art.similar.artist;
                 let name = art.name;
                 let similarNames = [];
@@ -264,7 +264,7 @@ class App extends React.Component {
         this.getQuotes();
 
         let _this = this;
-        firebase.auth().onAuthStateChanged(function (user) {
+        firebase.auth().onAuthStateChanged(user => {
             if (user) {
                 // User is signed in.
                 _this.setState({
@@ -501,7 +501,7 @@ class App extends React.Component {
                 let res = result.album;
                 let albumName = res.name;
                 let artist = res.artist;
-                let cover = res.image[0]["#text"];
+                let cover = res.image[1]["#text"];
                 let tracks = res.tracks.track;
                 let albumTracks = [];
 
@@ -584,7 +584,13 @@ class App extends React.Component {
                     {/* <!-- Boxen som visas när man har sökt -->*/}
                     <div className="results-container">
                         <div className="row">
-                            <div className="col-lg-8 col-md-10 col-xs-12 col-lg-offset-2 col-md-offset-1 search">
+                            <div className="col-lg-3 col-md-6 col-xs-12 col-sm-12 bio">
+                                {/*BIOGRAPHY*/}
+                                <Bio status={this.state.bioDone} similar={this.state.bioSimilar}
+                                     summary={this.state.bioSummary} name={this.state.bioName}
+                                     coverImg={this.state.bioImg}/>
+                            </div>
+                            <div className="col-lg-6 col-md-12 col-xs-12 col-sm-12 search">
                                 <div id="searchResults" className="search-results">
                                     {/*SEARCH RESULTS*/}
                                     <SearchResults
@@ -600,14 +606,8 @@ class App extends React.Component {
                                            author={this.state.quoteAuthor}/>
                                 </div>
                             </div>
-                            <div className="col-lg-4 col-md-5 col-xs-12 col-lg-offset-2 col-md-offset-1 lyric">
+                            <div className="col-lg-3 col-md-6 col-xs-12 col-sm-12 lyric">
                                 <AlbumTracks album={this.state.album}/>
-                            </div>
-                            <div className="col-lg-4 col-md-5 col-xs-12 bio">
-                                {/*BIOGRAPHY*/}
-                                <Bio status={this.state.bioDone} similar={this.state.bioSimilar}
-                                     summary={this.state.bioSummary} name={this.state.bioName}
-                                     coverImg={this.state.bioImg}/>
                             </div>
                         </div>
                     </div>
@@ -816,7 +816,7 @@ class Header extends React.Component {
                     </div>
                     }
                     {this.props.headerAction === 'favorites' &&
-                    <div className="log-in-container">
+                    <div className="log-in-container favorite-container">
                         <div className="user-box">
                             <img src={this.props.userPicture} alt="userPicture" className="profile-picture"/>
                             <h4>{this.props.userName}</h4>
