@@ -93,7 +93,7 @@ class App extends React.Component {
                 console.log(result);
                 let art = result.artist;
                 let summary = art.bio.summary;
-                let img = art.image.length > 0 ? art.image[0]["#text"] : "";
+                let img = art.image.length > 0 ? art.image[1]["#text"] : "";
                 let similar = art.similar.artist;
                 let name = art.name;
                 let similarNames = [];
@@ -264,7 +264,7 @@ class App extends React.Component {
         this.getQuotes();
 
         let _this = this;
-        firebase.auth().onAuthStateChanged(function (user) {
+        firebase.auth().onAuthStateChanged(user => {
             if (user) {
                 // User is signed in.
                 _this.setState({
@@ -501,7 +501,7 @@ class App extends React.Component {
                 let res = result.album;
                 let albumName = res.name;
                 let artist = res.artist;
-                let cover = res.image[0]["#text"];
+                let cover = res.image[1]["#text"];
                 let tracks = res.tracks.track;
                 let albumTracks = [];
 
@@ -815,7 +815,7 @@ class Header extends React.Component {
                     </div>
                     }
                     {this.props.headerAction === 'favorites' &&
-                    <div className="log-in-container">
+                    <div className="log-in-container favorite-container">
                         <div className="user-box">
                             <img src={this.props.userPicture} alt="userPicture" className="profile-picture"/>
                             <h4>{this.props.userName}</h4>
