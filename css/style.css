@@ -413,48 +413,6 @@ li {
     padding: 0 5px 0 5px;
 }
 
-@media only screen and (max-width: 64em) {
-    .lyric {
-        -webkit-box-ordinal-group: 3;
-        -ms-flex-order: 2;
-        order: 2;
-    }
-
-    .search {
-        -webkit-box-ordinal-group: 2;
-        -ms-flex-order: 1;
-        order: 1;
-    }
-
-    .bio {
-        -webkit-box-ordinal-group: 4;
-        -ms-flex-order: 3;
-        order: 3;
-    }
-    .mobile-hidden {
-        display: none;
-    }
-
-}
-
-@media only screen and (max-width: 48em) {
-    th {
-        display: none;
-    }
-
-    td {
-        display: block;
-    }
-
-    td:before {
-        content: attr(data-th) ": ";
-        font-weight: bold;
-        width: 6.5em;
-        display: inline-block;
-    }
-}
-
-
 /*QOUTE*/
 .spanStyle{
     z-index:50;
@@ -511,4 +469,110 @@ th > i {
     vertical-align: middle;
     padding: 0 8px 3px 0;
     cursor: pointer;
+}
+
+@media only screen and (min-width: 48em) {
+    .lyric {
+        -webkit-box-ordinal-group: 3;
+        -ms-flex-order: 2;
+        order: 2;
+    }
+
+    .search {
+        -webkit-box-ordinal-group: 2;
+        -ms-flex-order: 1;
+        order: 1;
+    }
+
+    .bio {
+        -webkit-box-ordinal-group: 4;
+        -ms-flex-order: 3;
+        order: 3;
+    }
+}
+
+@media only screen and (min-width: 64em) {
+    .lyric {
+        -webkit-box-ordinal-group: 3;
+        -ms-flex-order: 2;
+        order: 2;
+    }
+
+    .search {
+        -webkit-box-ordinal-group: 2;
+        -ms-flex-order: 1;
+        order: 1;
+    }
+
+    .bio {
+        -webkit-box-ordinal-group: 4;
+        -ms-flex-order: 3;
+        order: 3;
+    }
+
+}
+
+@media only screen and (min-width: 75em) {
+    .lyric {
+        -webkit-box-ordinal-group: 2;
+        -ms-flex-order: 1;
+        order: 1;
+    }
+
+    .search {
+        -webkit-box-ordinal-group: 3;
+        -ms-flex-order: 2;
+        order: 2;
+    }
+
+    .bio {
+        -webkit-box-ordinal-group: 4;
+        -ms-flex-order: 3;
+        order: 3;
+    }
+}
+
+@media only screen and (max-width: 48em) {
+    th {
+        display: none;
+    }
+
+    td {
+        display: block;
+    }
+
+    td:before {
+        content: attr(data-th) ": ";
+        font-weight: bold;
+        width: 6.5em;
+        display: inline-block;
+    }
+}
+
+@media only screen and (max-width: 48em) {
+    .lyric {
+        -webkit-box-ordinal-group: 3;
+        -ms-flex-order: 2;
+        order: 2;
+    }
+
+    .search {
+        -webkit-box-ordinal-group: 2;
+        -ms-flex-order: 1;
+        order: 1;
+    }
+
+    .bio {
+        -webkit-box-ordinal-group: 4;
+        -ms-flex-order: 3;
+        order: 3;
+    }
+
+    #main-search {
+        width: 250px;
+    }
+
+    .search-field-container {
+        width: 250px;
+    }
 }

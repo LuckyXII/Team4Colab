@@ -584,7 +584,13 @@ class App extends React.Component {
                     {/* <!-- Boxen som visas när man har sökt -->*/}
                     <div className="results-container">
                         <div className="row">
-                            <div className="col-lg-8 col-md-10 col-xs-12 col-lg-offset-2 col-md-offset-1 search">
+                            <div className="col-lg-3 col-md-6 col-xs-12 col-sm-12 bio">
+                                {/*BIOGRAPHY*/}
+                                <Bio status={this.state.bioDone} similar={this.state.bioSimilar}
+                                     summary={this.state.bioSummary} name={this.state.bioName}
+                                     coverImg={this.state.bioImg}/>
+                            </div>
+                            <div className="col-lg-6 col-md-12 col-xs-12 col-sm-12 search">
                                 <div id="searchResults" className="search-results">
                                     {/*SEARCH RESULTS*/}
                                     <SearchResults
@@ -600,14 +606,8 @@ class App extends React.Component {
                                            author={this.state.quoteAuthor}/>
                                 </div>
                             </div>
-                            <div className="col-lg-4 col-md-5 col-xs-12 col-lg-offset-2 col-md-offset-1 lyric">
+                            <div className="col-lg-3 col-md-6 col-xs-12 col-sm-12 lyric">
                                 <AlbumTracks album={this.state.album}/>
-                            </div>
-                            <div className="col-lg-4 col-md-5 col-xs-12 bio">
-                                {/*BIOGRAPHY*/}
-                                <Bio status={this.state.bioDone} similar={this.state.bioSimilar}
-                                     summary={this.state.bioSummary} name={this.state.bioName}
-                                     coverImg={this.state.bioImg}/>
                             </div>
                         </div>
                     </div>
