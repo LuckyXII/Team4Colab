@@ -28,6 +28,7 @@ class App extends React.Component {
             searchVal: "",
             radioVal: "track",
             album: {albumTracks: [""]},
+            
 
 
         };
@@ -48,6 +49,7 @@ class App extends React.Component {
         this.sortSearch = this.sortSearch.bind(this);
         this.getAlbumTracks = this.getAlbumTracks.bind(this);
         this.spotifyPreview = this.spotifyPreview.bind(this);
+        this.stopPreview = this.stopPreview.bind(this);
 
     }
 
@@ -387,7 +389,7 @@ class App extends React.Component {
                 return response.json();
             })
             .then((result) => {
-                console.log(result);
+
                 //Track
                 if (searchType === "track") {
 
@@ -521,14 +523,42 @@ class App extends React.Component {
 
     }
 
+    
+    //PLAY PREVIEW
     spotifyPreview(e) {
-
-        /* audioObject.pause();
-         let url = e.target.attributes[0].value;
-         var audio = new Audio(url);
-         this.setState({playing:audio});
-         this.state.playing.play();
-         */
+        let playing = this.state.playing;
+        let stop = document.getElementsByClassName("stop");
+        if(playing !== undefined && playing !== null){
+            playing.pause();
+        }
+        
+        //reset if song changes
+        if(stop !== undefined){
+            for(let i = 0; i < stop.length; i++){
+                if(stop[i].className !== "hidden"){
+                    stop[i].parentNode.previousSibling.className = ""; 
+                    stop[i].parentNode.className="hidden"; 
+                }
+            }
+        }    
+        
+        e.target.className = "hidden";
+        e.target.nextSibling.className = "";
+        let url = e.target.attributes[1].value;
+        let audio = document.createElement("audio");
+        audio.src=url;
+        this.setState({playing:audio, isPlaying:true});
+        audio.play();
+       
+    }
+    
+    //STOP PLAYING
+    stopPreview(e){
+        e.target.parentNode.previousSibling.className = ""; 
+        e.target.parentNode.className="hidden";
+        
+        this.state.playing.pause();
+        this.setState({isPlaying:false});
     }
 
     //RENDER
@@ -600,6 +630,8 @@ class App extends React.Component {
                                         results={this.state.results}
                                         getAlbum={this.getAlbumTracks}
                                         preview={this.spotifyPreview}
+                                        isPlaying={this.state.isPlaying}
+                                        stopPreview={this.stopPreview}
                                     />
                                     {/*QOUTE OF THE DAY*/}
                                     <Quote title={this.state.quoteTitle} quote={this.state.quote}
@@ -694,6 +726,7 @@ class Bio extends React.Component {
 //SEARCHRESULTS
 class SearchResults extends React.Component {
     render() {
+       
         let results = this.props.results;
         let searchType;
         if (results.length > 0) {
@@ -746,10 +779,12 @@ class SearchResults extends React.Component {
                                         <td data-th="Album" onClick={this.props.getAlbum}>{result.album}</td>
                                         <td data-th="Preview">youtube</td>
                                         <td data-th="Spotify" onClick={this.props.preview}
-                                            data-preview={result.preview}>spotify
+                                            data-preview={result.preview}>
+                                            spotify
                                         </td>
+                                        <td className="hidden"><i onClick={this.props.stopPreview} className="material-icons stop">stop</i></td>
                                         <td data-th="Favorite"><i onClick={this.props.sendFav}
-                                                                  className="material-icons">favorite</i></td>
+                                            className="material-icons">favorite</i></td>
                                     </tr>
                                 );
                             }
@@ -760,7 +795,7 @@ class SearchResults extends React.Component {
                                         <td data-th="Artist" onClick={this.props.getBio}>{result.artist}</td>
                                         <td data-th="Album" onClick={this.props.getAlbum}>{result.album}</td>
                                         <td data-th="Preview">youtube</td>
-                                        <td data-th="Spotify" onClick={this.props.preview}>spotify</td>
+                                        {/*<td data-th="Spotify" onClick={this.props.preview}>spotify</td>*/}
                                     </tr>
                                 );
                             }
@@ -771,7 +806,7 @@ class SearchResults extends React.Component {
                                         <td data-th="Cover"><img src={result.cover} alt="cover" className="coverPic"/></td>
                                         <td data-th="Artist" onClick={this.props.getBio}>{result.artist}</td>
                                         <td data-th="Preview">youtube</td>
-                                        <td data-th="Spotify" onClick={this.props.preview}>spotify</td>
+                                        {/*<td data-th="Spotify" onClick={this.props.preview}>spotify</td>*/}
                                     </tr>
                                 );
                             }
