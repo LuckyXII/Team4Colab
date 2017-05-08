@@ -28,8 +28,7 @@ class App extends React.Component {
             searchVal: "",
             radioVal: "track",
             album: {albumTracks: [""]},
-
-
+            toggleProfile: false
         };
 
         this.handleLogIn = this.handleLogIn.bind(this);
@@ -48,7 +47,7 @@ class App extends React.Component {
         this.sortSearch = this.sortSearch.bind(this);
         this.getAlbumTracks = this.getAlbumTracks.bind(this);
         this.spotifyPreview = this.spotifyPreview.bind(this);
-
+        this.toggleProfile = this.toggleProfile.bind(this);
     }
 
     handleLogIn() {
@@ -255,6 +254,13 @@ class App extends React.Component {
         } else if (target === 'default') {
             this.handleFavorites();
         }
+    }
+
+    toggleProfile() {
+        console.log('hi');
+        this.setState({
+            toggleProfile: !this.state.toggleProfile
+        })
     }
 
     //COMPONENT DID MOUNT
@@ -550,6 +556,8 @@ class App extends React.Component {
                     sortFavorites={this.sortFavorites}
                     getAlbum={this.getAlbumTracks}
                     getBio={this.getArtistBio}
+                    toggleProfile={this.toggleProfile}
+                    mobileAction={this.state.toggleProfile}
                 />
                 {/*<!-- SEARCH CONTAINER -->*/}
                 <div className="search-container">
@@ -600,6 +608,7 @@ class App extends React.Component {
                                         results={this.state.results}
                                         getAlbum={this.getAlbumTracks}
                                         preview={this.spotifyPreview}
+                                        loginStatus={this.state.loggedIn}
                                     />
                                     {/*QOUTE OF THE DAY*/}
                                     <Quote title={this.state.quoteTitle} quote={this.state.quote}
@@ -747,15 +756,18 @@ class SearchResults extends React.Component {
                                         <td data-th="Spotify" onClick={this.props.preview}
                                             data-preview={result.preview}>spotify
                                         </td>
+                                        {this.props.loginStatus &&
                                         <td data-th="Favorite"><i onClick={this.props.sendFav}
                                                                   className="material-icons">favorite</i></td>
+                                        }
                                     </tr>
                                 );
                             }
                             else if (result.searchType === "album") {
                                 return (
                                     <tr key={index}>
-                                        <td data-th="Cover"><img src={result.cover} alt="cover" className="coverPic"/></td>
+                                        <td data-th="Cover"><img src={result.cover} alt="cover" className="coverPic"/>
+                                        </td>
                                         <td data-th="Artist" onClick={this.props.getBio}>{result.artist}</td>
                                         <td data-th="Album" onClick={this.props.getAlbum}>{result.album}</td>
                                         <td data-th="Preview">youtube</td>
@@ -767,7 +779,8 @@ class SearchResults extends React.Component {
 
                                 return (
                                     <tr key={index}>
-                                        <td data-th="Cover"><img src={result.cover} alt="cover" className="coverPic"/></td>
+                                        <td data-th="Cover"><img src={result.cover} alt="cover" className="coverPic"/>
+                                        </td>
                                         <td data-th="Artist" onClick={this.props.getBio}>{result.artist}</td>
                                         <td data-th="Preview">youtube</td>
                                         <td data-th="Spotify" onClick={this.props.preview}>spotify</td>
@@ -792,7 +805,7 @@ class Header extends React.Component {
             return (
                 <header className="header">
                     <img src="./rescources/logo.png" alt="MusicSearch" className="logo"/>
-                    <div className="log-in-container" id="container">
+                    <div className="log-in-container no-login" id="container">
                         <button type="button" className="btn" id="log-in" onClick={this.props.handleLogIn}>Log in
                         </button>
                     </div>
@@ -803,15 +816,37 @@ class Header extends React.Component {
                 <header className="header">
                     <img src="./rescources/logo.png" alt="MusicSearch" className="logo"/>
                     {this.props.headerAction !== 'favorites' &&
-                    <div className="log-in-container">
-                        <div className="user-box">
-                            <img src={this.props.userPicture} alt="userPicture" className="profile-picture"/>
-                            <h4>{this.props.userName}</h4>
-                            <hr className="divider"/>
-                            <span className="favorites" onClick={this.props.handleFavorites}><i
-                                className="material-icons">favorite</i>Favorites</span>
-                            <span className="log-out" id="log-out" onClick={this.props.handleLogOut}>Log out</span>
+                    <div>
+                        {window.innerWidth < 768 ? (
+                            <img src={this.props.userPicture} alt="userPicture"
+                                 className="profile-picture mobile-profile" onClick={this.props.toggleProfile}/>
+                        ) : (
+                            <div className="log-in-container">
+                                <div className="user-box">
+                                    <img src={this.props.userPicture} alt="userPicture" className="profile-picture"/>
+                                    <h4>{this.props.userName}</h4>
+                                    <hr className="divider"/>
+                                    <span className="favorites" onClick={this.props.handleFavorites}><i
+                                        className="material-icons">favorite</i>Favorites</span>
+                                    <span className="log-out" id="log-out"
+                                          onClick={this.props.handleLogOut}>Log out</span>
+                                </div>
+                            </div>
+                        )}
+                        {this.props.mobileAction &&
+                        <div className="log-in-container">
+                            <div className="user-box">
+                                <img src={this.props.userPicture} alt="userPicture" className="profile-picture"/>
+                                <h4>{this.props.userName}</h4>
+                                <i className="material-icons close" onClick={this.props.toggleProfile}>close</i>
+                                <hr className="divider"/>
+                                <span className="favorites" onClick={this.props.handleFavorites}><i
+                                    className="material-icons">favorite</i>Favorites</span>
+                                <span className="log-out" id="log-out"
+                                      onClick={this.props.handleLogOut}>Log out</span>
+                            </div>
                         </div>
+                        }
                     </div>
                     }
                     {this.props.headerAction === 'favorites' &&
@@ -851,7 +886,8 @@ class Header extends React.Component {
                                             <td data-th="Album" onClick={this.props.getAlbum}>{favorite.album}</td>
                                             <td data-th="Preview">{favorite.youtube}</td>
                                             <td data-th="Spotify">{favorite.spotify}</td>
-                                            <td data-th="Remove"><i className="material-icons" onClick={this.props.removeFavorite}>favorite</i>
+                                            <td data-th="Remove"><i className="material-icons"
+                                                                    onClick={this.props.removeFavorite}>favorite</i>
                                             </td>
                                         </tr>
                                     )}

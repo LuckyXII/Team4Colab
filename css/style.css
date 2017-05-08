@@ -549,14 +549,18 @@ th > i {
         display: inline-block;
     }
 
-    .favorite-container {
+    .log-in-container {
         position: absolute;
         top: 0;
         right: 0;
         z-index: 1;
         width: 100vw;
-        height: 100vh;
         margin: -24px -2rem;
+    }
+
+    .user-box {
+        height: 100vh;
+        overflow: scroll;
     }
 
     .lyric {
@@ -583,5 +587,27 @@ th > i {
 
     .search-field-container {
         width: 250px;
+    }
+
+    .no-login {
+        position: relative;
+    }
+
+    .no-login > .btn {
+        display: block;
+        margin: 5vh auto 0 auto;
+    }
+
+    .logo {
+        float: none;
+        margin: 0 auto 0 auto;
+        display: block;
+    }
+
+    .mobile-profile {
+        display: block;
+        margin: 2vh auto 0 auto;
+        float: none;
+        cursor: pointer;
     }
 }
