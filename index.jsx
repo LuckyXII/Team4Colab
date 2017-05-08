@@ -28,7 +28,10 @@ class App extends React.Component {
             searchVal: "",
             radioVal: "track",
             album: {albumTracks: [""]},
-            toggleProfile: false
+            toggleProfile: false,
+            bioDisplay: false,
+            searchDisplay: false,
+            albumDisplay: false
         };
 
         this.handleLogIn = this.handleLogIn.bind(this);
@@ -49,6 +52,8 @@ class App extends React.Component {
         this.spotifyPreview = this.spotifyPreview.bind(this);
         this.toggleProfile = this.toggleProfile.bind(this);
         this.stopPreview = this.stopPreview.bind(this);
+        this.closeBio = this.closeBio.bind(this);
+        this.closeAlbum = this.closeAlbum.bind(this);
     }
 
     handleLogIn() {
@@ -107,8 +112,8 @@ class App extends React.Component {
                     bioImg: img,
                     bioSimilar: similarNames,
                     bioSummary: summary,
-                    bioDone: true
-
+                    bioDone: true,
+                    bioDisplay: true
                 });
             });
     }
@@ -498,7 +503,10 @@ class App extends React.Component {
                 }
 
 
-                this.setState({results: resultTable});
+                this.setState({
+                    results: resultTable,
+                    searchDisplay: true
+                });
             });
     }//END FINDRESULTS
 
@@ -550,7 +558,8 @@ class App extends React.Component {
                         artist: artist,
                         cover: cover,
                         albumTracks: albumTracks
-                    }
+                    },
+                    albumDisplay: true
                 });
             });
 
@@ -592,6 +601,18 @@ class App extends React.Component {
 
         this.state.playing.pause();
         this.setState({isPlaying: false});
+    }
+
+    closeBio() {
+        this.setState({
+            bioDisplay: !this.state.bioDisplay
+        })
+    }
+
+    closeAlbum() {
+        this.setState({
+            albumDisplay: !this.state.albumDisplay
+        })
     }
 
     //RENDER
@@ -651,12 +672,25 @@ class App extends React.Component {
                     {/* <!-- Boxen som visas när man har sökt -->*/}
                     <div className="results-container">
                         <div className="row">
+                            {!this.state.bioDisplay &&
+                            <div className="col-lg-3 col-md-6 col-xs-12 col-sm-12 bio invisible">
+                            </div>
+                            }
+                            {this.state.bioDisplay &&
                             <div className="col-lg-3 col-md-6 col-xs-12 col-sm-12 bio">
                                 {/*BIOGRAPHY*/}
                                 <Bio status={this.state.bioDone} similar={this.state.bioSimilar}
                                      summary={this.state.bioSummary} name={this.state.bioName}
-                                     coverImg={this.state.bioImg}/>
+                                     coverImg={this.state.bioImg} closeBio={this.closeBio}/>
                             </div>
+                            }
+                            {!this.state.searchDisplay &&
+                            <div className="col-lg-6 col-md-12 col-xs-12 col-sm-12 search invisible">
+                                <div id="searchResults" className="search-results">
+                                </div>
+                            </div>
+                            }
+                            {this.state.searchDisplay &&
                             <div className="col-lg-6 col-md-12 col-xs-12 col-sm-12 search">
                                 <div id="searchResults" className="search-results">
                                     {/*SEARCH RESULTS*/}
@@ -676,9 +710,16 @@ class App extends React.Component {
                                            author={this.state.quoteAuthor}/>
                                 </div>
                             </div>
-                            <div className="col-lg-3 col-md-6 col-xs-12 col-sm-12 lyric">
-                                <AlbumTracks album={this.state.album}/>
+                            }
+                            {!this.state.albumDisplay &&
+                            <div className="col-lg-3 col-md-6 col-xs-12 col-sm-12 lyric invisible">
                             </div>
+                            }
+                            {this.state.albumDisplay &&
+                            <div className="col-lg-3 col-md-6 col-xs-12 col-sm-12 lyric">
+                                <AlbumTracks album={this.state.album} closeAlbum={this.closeAlbum}/>
+                            </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -695,6 +736,8 @@ class AlbumTracks extends React.Component {
 
         return (
             <div className="albumTracks">
+                <div className="relative">
+                <i className="material-icons absolute clickable" onClick={this.props.closeAlbum}>close</i>
                 <img src={this.props.album.cover} alt="cover" className="album-image"/>
                 <h2>{this.props.album.artist}</h2>
                 <h3>{this.props.album.albumName}</h3>
@@ -706,6 +749,7 @@ class AlbumTracks extends React.Component {
                     })}
                 </ul>
                 <img className="lastFM" src="./rescources/lastfm_black_small.gif" alt="lastFM"/>
+                </div>
             </div>
         );
     }
@@ -744,6 +788,7 @@ class Bio extends React.Component {
                 }
                 {result.status === true &&
                 <div className="relative">
+                    <i className="material-icons absolute clickable" onClick={this.props.closeBio}>close</i>
                     <img src={this.props.coverImg} alt="cover" className="bio-image"/>
                     <h2>{this.props.name}</h2>
                     <div>
@@ -823,10 +868,17 @@ class SearchResults extends React.Component {
                                             data-preview={result.preview} className="clickable">
                                             Preview
                                         </td>
+                                        {window.innerWidth > 768 &&
                                         <td className="hidden" style={{textAlign: 'center'}} data-th="Spotify"><i
                                             onClick={this.props.stopPreview}
                                             className="material-icons stop">stop</i>
                                         </td>
+                                        }
+                                        {window.innerWidth < 768 &&
+                                        <td className="hidden" data-th="Spotify"><i
+                                            onClick={this.props.stopPreview}
+                                            className="material-icons stop">stop</i>
+                                        </td>}
                                         {this.props.loginStatus &&
                                         <td data-th="Favorite"><i onClick={this.props.sendFav}
                                                                   className="material-icons">favorite</i></td>
@@ -969,10 +1021,18 @@ class Header extends React.Component {
                                             <td data-th="Preview" data-link={favorite.preview} className="clickable"
                                                 onClick={this.props.preview}>Preview
                                             </td>
+                                            {window.innerWidth > 768 &&
                                             <td className="hidden" data-th="Preview" style={{textAlign: 'center'}}><i
                                                 onClick={this.props.stopPreview}
                                                 className="material-icons stop">stop</i>
                                             </td>
+                                            }
+                                            {window.innerWidth < 768 &&
+                                            <td className="hidden" data-th="Preview"><i
+                                                onClick={this.props.stopPreview}
+                                                className="material-icons stop">stop</i>
+                                            </td>
+                                            }
                                             <td data-th="Remove"><i className="material-icons"
                                                                     onClick={this.props.removeFavorite}>favorite</i>
                                             </td>

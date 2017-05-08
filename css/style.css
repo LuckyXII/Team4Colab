@@ -270,8 +270,18 @@ SUGGESTIONS
 RESULT-BOX + LYRICS + BIO
  */
 
+.absolute {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
 .hidden {
     display: none;
+}
+
+.invisible {
+    opacity: 0;
 }
 
 .stop {
@@ -306,7 +316,7 @@ RESULT-BOX + LYRICS + BIO
     position: relative;
 }
 
-.albumTracks > .album-image {
+.albumTracks > .relative > .album-image {
     left: 40px;
     top: 35px;
     border-radius: 35px;
