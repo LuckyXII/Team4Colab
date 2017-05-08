@@ -269,6 +269,14 @@ SUGGESTIONS
 RESULT-BOX + LYRICS + BIO
  */
 
+.hidden{
+    display: none;
+}
+
+.stop{
+    text-align: center;
+}
+
 .lastFM {
     border-radius: 5px;
 }
