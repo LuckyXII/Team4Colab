@@ -793,7 +793,16 @@ class Bio extends React.Component {
                     <h2>{this.props.name}</h2>
                     <div>
                         <h3>Similar Artists:</h3>
-                        <p>{this.props.similar}</p>
+                        <p>
+                        {this.props.similar.map((artist, index) => {
+                            if (index === this.props.similar.length - 1) {
+                                return (<span key={index}>{artist}</span>)
+                            } else {
+                                return (<span key={index}>{artist}, </span>)
+                            }
+                        }
+                        )}
+                        </p>
                         <h3>Band Biography</h3>
                         <p dangerouslySetInnerHTML={{__html: this.props.summary}}></p>
                     </div>
