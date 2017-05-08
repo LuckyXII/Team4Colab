@@ -1,3 +1,7 @@
+* {
+    user-select: none;
+}
+
 body {
     background: #382e3d;
     margin: 20px 0 20px 0;
@@ -10,6 +14,7 @@ h1 {
     color: #FEFEFD;
     font-weight: 600;
     font-size: 2em;
+    user-select: none;
 }
 
 ul {
@@ -74,6 +79,7 @@ ul {
 }
 
 label {
+    user-select: none;
     margin-right: 5px;
     margin-left: 10px;
     margin-bottom: 15px;
@@ -323,7 +329,7 @@ RESULT-BOX + LYRICS + BIO
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
-.albumTracks > ul > li {
+.albumTracks > .relative > ul > li {
     padding: 3px 5px 3px 5px;
 }
 
@@ -469,6 +475,11 @@ TABLE-TEST
     color: #563c50;
 }
 
+.table-overflow {
+    max-height: 30vh;
+    overflow: scroll;
+}
+
 table {
     border-collapse: collapse;
     width: 100%;
@@ -524,6 +535,25 @@ th > i {
     vertical-align: middle;
     padding: 0 8px 3px 0;
     cursor: pointer;
+}
+
+
+::-webkit-scrollbar {
+    width: 8px;
+    margin: 0 0 0 5px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #f7f7f8;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(153, 106, 142, 0.8);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-corner {
+    background-color: #f7f7f8;
 }
 
 @media only screen and (min-width: 48em) {
@@ -612,12 +642,17 @@ th > i {
         margin: -24px -2rem;
     }
 
-    .user-box {
-        /*
-        height: 100vh;
+    .table-overflow {
+        max-height: 75vh;
         overflow: scroll;
-        */
+    }
+
+    .user-box {
         border-radius: 0;
+    }
+
+    .max-height {
+        height: 100vh;
     }
 
     .lyric {

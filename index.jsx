@@ -578,14 +578,14 @@ class App extends React.Component {
         if (stop !== undefined) {
             for (let i = 0; i < stop.length; i++) {
                 if (stop[i].className !== "hidden") {
-                    stop[i].parentNode.previousSibling.className = "";
+                    stop[i].parentNode.previousSibling.className = "clickable";
                     stop[i].parentNode.className = "hidden";
                 }
             }
         }
 
         e.target.className = "hidden";
-        e.target.nextSibling.className = "";
+        e.target.nextSibling.className = "clickable";
         let url = e.target.attributes[1].value;
         let audio = document.createElement("audio");
         audio.src = url;
@@ -596,7 +596,7 @@ class App extends React.Component {
 
     //STOP PLAYING
     stopPreview(e) {
-        e.target.parentNode.previousSibling.className = "";
+        e.target.parentNode.previousSibling.className = "clickable";
         e.target.parentNode.className = "hidden";
 
         this.state.playing.pause();
@@ -979,7 +979,7 @@ class Header extends React.Component {
                     }
                     {this.props.headerAction === 'favorites' &&
                     <div className="log-in-container favorite-container">
-                        <div className="user-box">
+                        <div className="user-box max-height">
                             <img src={this.props.userPicture} alt="userPicture" className="profile-picture"/>
                             <h4>{this.props.userName}</h4>
                             <i className="material-icons clickable" onClick={this.props.closeFavorites}>close</i>
@@ -994,7 +994,7 @@ class Header extends React.Component {
                             <h3 className="smaller">Du har inga favoriter :(</h3>
                             }
                             {this.props.favorites.length > 0 &&
-                            <div className="table-container">
+                            <div className="table-container table-overflow">
                                 <table>
                                     <tbody>
                                     <tr>
