@@ -119,7 +119,8 @@ class App extends React.Component {
         let track = par.children[0].textContent;
         let artist = par.children[1].textContent;
         let album = par.children[2].textContent;
-
+        let spotify = par.children[3].attributes['data-link'].value;
+        let preview = par.children[4].attributes['data-preview'].value;
 
         let uid = this.state.user.uid;
         const database = firebase.database();
@@ -128,8 +129,8 @@ class App extends React.Component {
             track: track,
             album: album,
             artist: artist,
-            youtube: 'YouTube',
-            spotify: 'Spotify'
+            spotify: spotify,
+            preview: preview
         });
 
     }
@@ -150,8 +151,8 @@ class App extends React.Component {
                     track: data[favorite].track,
                     album: data[favorite].album,
                     artist: data[favorite].artist,
-                    youtube: 'YouTube',
-                    spotify: 'Spotify',
+                    spotify: data[favorite].spotify,
+                    preview: data[favorite].preview,
                     id: favorite
                 });
             }
@@ -200,11 +201,25 @@ class App extends React.Component {
     // SORT FAVORITS
     sortFavorites(event) {
         let target;
+        let targetElement;
         if (event.target.attributes['data-sort'] === undefined) {
             target = event.target.parentNode.attributes['data-sort'].value;
+            targetElement = event.target.parentNode;
         } else {
             target = event.target.attributes['data-sort'].value;
+            targetElement = event.target;
         }
+
+        let allTableHeaders = document.getElementsByTagName('th');
+
+        for (let i = 0; i < allTableHeaders.length; i++) {
+            if (allTableHeaders[i] !== targetElement) {
+                allTableHeaders[i].removeAttribute('class');
+            }
+        }
+        targetElement.className = 'bold';
+
+
         let getFavorites = this.state.favorites;
         if (target === 'track') {
             getFavorites.sort((a, b) => {
@@ -320,11 +335,24 @@ class App extends React.Component {
     //SORTSEARCH
     sortSearch(event) {
         let target;
+        let targetElement;
         if (event.target.attributes['data-sort'] === undefined) {
             target = event.target.parentNode.attributes['data-sort'].value;
+            targetElement = event.target.parentNode;
         } else {
             target = event.target.attributes['data-sort'].value;
+            targetElement = event.target;
         }
+
+        let allTableHeaders = document.getElementsByTagName('th');
+
+        for (let i = 0; i < allTableHeaders.length; i++) {
+            if (allTableHeaders[i] !== targetElement) {
+                allTableHeaders[i].removeAttribute('class');
+            }
+        }
+        targetElement.className = 'bold';
+
         let getResults = this.state.results;
         if (target === 'track') {
             getResults.sort((a, b) => {
@@ -528,42 +556,42 @@ class App extends React.Component {
 
     }
 
-    
+
     //PLAY PREVIEW
     spotifyPreview(e) {
         let playing = this.state.playing;
         let stop = document.getElementsByClassName("stop");
-        if(playing !== undefined && playing !== null){
+        if (playing !== undefined && playing !== null) {
             playing.pause();
         }
-        
+
         //reset if song changes
-        if(stop !== undefined){
-            for(let i = 0; i < stop.length; i++){
-                if(stop[i].className !== "hidden"){
-                    stop[i].parentNode.previousSibling.className = ""; 
-                    stop[i].parentNode.className="hidden"; 
+        if (stop !== undefined) {
+            for (let i = 0; i < stop.length; i++) {
+                if (stop[i].className !== "hidden") {
+                    stop[i].parentNode.previousSibling.className = "";
+                    stop[i].parentNode.className = "hidden";
                 }
             }
-        }    
-        
+        }
+
         e.target.className = "hidden";
         e.target.nextSibling.className = "";
         let url = e.target.attributes[1].value;
         let audio = document.createElement("audio");
-        audio.src=url;
-        this.setState({playing:audio, isPlaying:true});
+        audio.src = url;
+        this.setState({playing: audio, isPlaying: true});
         audio.play();
-       
+
     }
-    
+
     //STOP PLAYING
-    stopPreview(e){
-        e.target.parentNode.previousSibling.className = ""; 
-        e.target.parentNode.className="hidden";
-        
+    stopPreview(e) {
+        e.target.parentNode.previousSibling.className = "";
+        e.target.parentNode.className = "hidden";
+
         this.state.playing.pause();
-        this.setState({isPlaying:false});
+        this.setState({isPlaying: false});
     }
 
     //RENDER
@@ -587,6 +615,8 @@ class App extends React.Component {
                     getBio={this.getArtistBio}
                     toggleProfile={this.toggleProfile}
                     mobileAction={this.state.toggleProfile}
+                    preview={this.spotifyPreview}
+                    stopPreview={this.stopPreview}
                 />
                 {/*<!-- SEARCH CONTAINER -->*/}
                 <div className="search-container">
@@ -734,7 +764,7 @@ class Bio extends React.Component {
 //SEARCHRESULTS
 class SearchResults extends React.Component {
     render() {
-       
+
         let results = this.props.results;
         let searchType;
         if (results.length > 0) {
@@ -783,14 +813,20 @@ class SearchResults extends React.Component {
                                 return (
                                     <tr key={index}>
                                         <td data-th="Track">{result.track}</td>
-                                        <td data-th="Artist" onClick={this.props.getBio}>{result.artist}</td>
-                                        <td data-th="Album" onClick={this.props.getAlbum}>{result.album}</td>
-                                        <td data-th="Preview">youtube</td>
-                                        <td data-th="Spotify" onClick={this.props.preview}
-                                            data-preview={result.preview}>
-                                            spotify
+                                        <td data-th="Artist" className="clickable"
+                                            onClick={this.props.getBio}>{result.artist}</td>
+                                        <td data-th="Album" className="clickable"
+                                            onClick={this.props.getAlbum}>{result.album}</td>
+                                        <td data-th="Spotify" data-link={result.openSpotify} className="clickable"><a
+                                            href={result.openSpotify} target="_blank">Spotify</a></td>
+                                        <td data-th="Preview" onClick={this.props.preview}
+                                            data-preview={result.preview} className="clickable">
+                                            Preview
                                         </td>
-                                        <td className="hidden"><i onClick={this.props.stopPreview} className="material-icons stop">stop</i></td>
+                                        <td className="hidden" style={{textAlign: 'center'}} data-th="Spotify"><i
+                                            onClick={this.props.stopPreview}
+                                            className="material-icons stop">stop</i>
+                                        </td>
                                         {this.props.loginStatus &&
                                         <td data-th="Favorite"><i onClick={this.props.sendFav}
                                                                   className="material-icons">favorite</i></td>
@@ -803,9 +839,12 @@ class SearchResults extends React.Component {
                                     <tr key={index}>
                                         <td data-th="Cover"><img src={result.cover} alt="cover" className="coverPic"/>
                                         </td>
-                                        <td data-th="Artist" onClick={this.props.getBio}>{result.artist}</td>
-                                        <td data-th="Album" onClick={this.props.getAlbum}>{result.album}</td>
-                                        <td data-th="Preview">youtube</td>
+                                        <td data-th="Artist" onClick={this.props.getBio}
+                                            className="clickable">{result.artist}</td>
+                                        <td data-th="Album" onClick={this.props.getAlbum}
+                                            className="clickable">{result.album}</td>
+                                        <td data-th="Spotify"><a href={result.openSpotify} target="_blank">Spotify</a>
+                                        </td>
                                         {/*<td data-th="Spotify" onClick={this.props.preview}>spotify</td>*/}
                                     </tr>
                                 );
@@ -816,8 +855,10 @@ class SearchResults extends React.Component {
                                     <tr key={index}>
                                         <td data-th="Cover"><img src={result.cover} alt="cover" className="coverPic"/>
                                         </td>
-                                        <td data-th="Artist" onClick={this.props.getBio}>{result.artist}</td>
-                                        <td data-th="Preview">youtube</td>
+                                        <td data-th="Artist" onClick={this.props.getBio}
+                                            className="clickable">{result.artist}</td>
+                                        <td data-th="Spotify"><a href={result.openSpotify} target="_blank">Spotify</a>
+                                        </td>
                                         {/*<td data-th="Spotify" onClick={this.props.preview}>spotify</td>*/}
                                     </tr>
                                 );
@@ -861,9 +902,9 @@ class Header extends React.Component {
                                     <img src={this.props.userPicture} alt="userPicture" className="profile-picture"/>
                                     <h4>{this.props.userName}</h4>
                                     <hr className="divider"/>
-                                    <span className="favorites" onClick={this.props.handleFavorites}><i
+                                    <span className="favorites clickable" onClick={this.props.handleFavorites}><i
                                         className="material-icons">favorite</i>Favorites</span>
-                                    <span className="log-out" id="log-out"
+                                    <span className="log-out clickable" id="log-out"
                                           onClick={this.props.handleLogOut}>Log out</span>
                                 </div>
                             </div>
@@ -889,7 +930,7 @@ class Header extends React.Component {
                         <div className="user-box">
                             <img src={this.props.userPicture} alt="userPicture" className="profile-picture"/>
                             <h4>{this.props.userName}</h4>
-                            <i className="material-icons" onClick={this.props.closeFavorites}>close</i>
+                            <i className="material-icons clickable" onClick={this.props.closeFavorites}>close</i>
                             <hr className="divider"/>
                             <h3>Favorites</h3>
                             <div className="favorite-search-wrap">
@@ -917,10 +958,21 @@ class Header extends React.Component {
                                     {this.props.favorites.map((favorite, index) =>
                                         <tr key={index} data-id={favorite.id}>
                                             <td data-th="Track">{favorite.track}</td>
-                                            <td data-th="Artist" onClick={this.props.getBio}>{favorite.artist}</td>
-                                            <td data-th="Album" onClick={this.props.getAlbum}>{favorite.album}</td>
-                                            <td data-th="Preview">{favorite.youtube}</td>
-                                            <td data-th="Spotify">{favorite.spotify}</td>
+                                            <td data-th="Artist" onClick={this.props.getBio}
+                                                className="clickable">{favorite.artist}</td>
+                                            <td data-th="Album" onClick={this.props.getAlbum}
+                                                className="clickable">{favorite.album}</td>
+                                            <td data-th="Spotify" className="clickable"><a href={favorite.spotify}
+                                                                                           target="_blank">Spotify</a>
+                                            </td>
+
+                                            <td data-th="Preview" data-link={favorite.preview} className="clickable"
+                                                onClick={this.props.preview}>Preview
+                                            </td>
+                                            <td className="hidden" data-th="Preview" style={{textAlign: 'center'}}><i
+                                                onClick={this.props.stopPreview}
+                                                className="material-icons stop">stop</i>
+                                            </td>
                                             <td data-th="Remove"><i className="material-icons"
                                                                     onClick={this.props.removeFavorite}>favorite</i>
                                             </td>

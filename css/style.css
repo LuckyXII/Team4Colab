@@ -3,6 +3,7 @@ body {
     margin: 20px 0 20px 0;
     padding: 0;
     font-family: Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 
 h1 {
@@ -79,7 +80,7 @@ label {
     display: inline-block;
     cursor: pointer;
     position: relative;
-    font-weight: 300;
+    font-weight: 400;
     color: #FEFEFD;
 }
 
@@ -111,7 +112,7 @@ input[type=radio] {
 input[type=radio]:checked + label:before {
     content: "\2022";
     color: #382e3d;
-    font-size: 16px;
+    font-size: 30px;
     text-align: center;
     line-height: 18px;
 }
@@ -269,12 +270,13 @@ SUGGESTIONS
 RESULT-BOX + LYRICS + BIO
  */
 
-.hidden{
+.hidden {
     display: none;
 }
 
-.stop{
+.stop {
     text-align: center;
+    font-size: 32px;
 }
 
 .lastFM {
@@ -443,14 +445,43 @@ TABLE-TEST
     /*overflow: scroll;*/
 }
 
+.bold {
+    font-weight: 600;
+    color: #563c50;
+}
+
+.clickable {
+    cursor: pointer;
+    transition: all .3s;
+}
+
+.clickable:hover {
+    color: #563c50;
+}
+
 table {
     border-collapse: collapse;
     width: 100%;
 }
 
+td > a {
+    text-decoration: none;
+    color: #996A8E;
+    transition: all .3s;
+}
+
+td > a:hover {
+    color: #563c50;
+}
+
 th {
     font-weight: 500;
     cursor: pointer;
+    transition: all .3s;
+}
+
+th:hover {
+    color: #563c50;
 }
 
 td, th {
@@ -471,6 +502,11 @@ td > i {
     vertical-align: middle;
     padding: 0 8px 3px 0;
     cursor: pointer;
+    transition: all .3s;
+}
+
+td > i:hover {
+    color: #563c50;
 }
 
 th > i {
@@ -567,8 +603,11 @@ th > i {
     }
 
     .user-box {
+        /*
         height: 100vh;
         overflow: scroll;
+        */
+        border-radius: 0;
     }
 
     .lyric {
