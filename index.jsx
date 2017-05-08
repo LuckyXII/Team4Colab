@@ -281,7 +281,7 @@ class App extends React.Component {
         console.log('hi');
         this.setState({
             toggleProfile: !this.state.toggleProfile
-        })
+        });
     }
 
     //COMPONENT DID MOUNT
@@ -606,13 +606,13 @@ class App extends React.Component {
     closeBio() {
         this.setState({
             bioDisplay: !this.state.bioDisplay
-        })
+        });
     }
 
     closeAlbum() {
         this.setState({
             albumDisplay: !this.state.albumDisplay
-        })
+        });
     }
 
     //RENDER
@@ -796,9 +796,9 @@ class Bio extends React.Component {
                         <p>
                         {this.props.similar.map((artist, index) => {
                             if (index === this.props.similar.length - 1) {
-                                return (<span key={index}>{artist}</span>)
+                                return (<span key={index}>{artist}</span>);
                             } else {
-                                return (<span key={index}>{artist}, </span>)
+                                return (<span key={index}>{artist}, </span>);
                             }
                         }
                         )}
