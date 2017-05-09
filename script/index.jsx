@@ -32,7 +32,9 @@ class App extends React.Component {
             bioDisplay: false,
             searchDisplay: false,
             albumDisplay: false,
-            playingSong: ''
+            playingSong: '',
+            statusMessage: '',
+            statusCode: ''
         };
 
         this.handleLogIn = this.handleLogIn.bind(this);
@@ -55,6 +57,7 @@ class App extends React.Component {
         this.stopPreview = this.stopPreview.bind(this);
         this.closeBio = this.closeBio.bind(this);
         this.closeAlbum = this.closeAlbum.bind(this);
+        this.statusChange = this.statusChange.bind(this);
     }
 
     handleLogIn() {
@@ -70,8 +73,10 @@ class App extends React.Component {
                     uid: user.uid
                 }
             });
+            this.statusChange('success', 'You successfully logged in!')
         }).catch(error => {
             console.log(error);
+            this.statusChange('error', 'Something went wrong, try again.')
         });
     }
 
@@ -80,8 +85,10 @@ class App extends React.Component {
             this.setState({
                 loggedIn: false
             });
+            this.statusChange('success', 'You successfully logged out!')
         }).catch(error => {
             console.log(error);
+            this.statusChange('error', 'Something went wrong, try again.')
         });
     }
 
@@ -130,7 +137,27 @@ class App extends React.Component {
         let duplicate = false;
 
         let uid = this.state.user.uid;
+
         const database = firebase.database();
+        //LÄSA DATA FRÅN DATABASEN
+        database.ref('users/' + this.state.user.uid + '/favorites/').on('value', snapshot => {
+            let data = snapshot.val();
+            let allFavorites = [];
+            for (let favorite in data) {
+                allFavorites.push({
+                    track: data[favorite].track,
+                    album: data[favorite].album,
+                    artist: data[favorite].artist,
+                    spotify: data[favorite].spotify,
+                    preview: data[favorite].preview,
+                    id: favorite
+                });
+            }
+            this.setState({
+                favorites: allFavorites,
+                originalFavorites: allFavorites
+            });
+        });
 
         this.state.originalFavorites.map(song => {
             if (track === song.track && artist === song.artist && album === song.album) {
@@ -146,10 +173,12 @@ class App extends React.Component {
                 spotify: spotify,
                 preview: preview
             });
-            
+
             this.setState({addSucess: true});
-        }else{
-            this.setState({addSucess:false});
+            this.statusChange('success', 'Your song was added to your favorites.')
+        } else {
+            this.setState({addSucess: false});
+            this.statusChange('error', 'You already have this song in your favorites.')
         }
 
     }
@@ -195,6 +224,7 @@ class App extends React.Component {
         let targetId = event.target.parentNode.parentNode.attributes['data-id'].value;
         const database = firebase.database();
         database.ref('users/' + this.state.user.uid + '/favorites/' + targetId).set(null);
+        this.statusChange('success', 'Your song was removed from your favorites.')
     }
 
     //FILTER FAVORITES
@@ -300,7 +330,7 @@ class App extends React.Component {
 
     //COMPONENT DID MOUNT
     componentDidMount() {
-
+        console.log('mount');
         //find quote
         this.getQuotes();
 
@@ -319,6 +349,7 @@ class App extends React.Component {
                 //läs in data direkt så jag har något att jämföra emot om man inte öppnar favoriter först
                 const database = firebase.database();
                 database.ref('users/' + this.state.user.uid + '/favorites/').once('value', snapshot => {
+                    console.log('firebase mount');
                     let data = snapshot.val();
                     let allFavorites = [];
                     for (let favorite in data) {
@@ -665,10 +696,38 @@ class App extends React.Component {
         });
     }
 
+    statusChange(status, message) {
+        if (messageExists !== undefined) {
+            clearTimeout(messageExists)
+        }
+
+        this.setState({
+            statusCode: status,
+            statusMessage: message
+        });
+
+        messageExists = setTimeout(() => {
+            this.setState({
+                statusCode: '',
+                statusMessage: ''
+            });
+        }, 3000)
+    }
+
     //RENDER
     render() {
         return (
             <div className="container-fluid">
+                {this.state.statusCode === 'success' &&
+                <div className="success">
+                    <h4>{this.state.statusMessage}</h4>
+                </div>
+                }
+                {this.state.statusCode === 'error' &&
+                <div className="error">
+                    <h4>{this.state.statusMessage}</h4>
+                </div>
+                }
                 <Header
                     loginStatus={this.state.loggedIn}
                     handleLogIn={this.handleLogIn}
@@ -965,7 +1024,7 @@ class SearchResults extends React.Component {
                                             className="clickable">{result.album}</td>
                                         <td data-th="Spotify"><a href={result.openSpotify} target="_blank">Spotify</a>
                                         </td>
-                                       
+
                                     </tr>
                                 );
                             }
@@ -979,7 +1038,7 @@ class SearchResults extends React.Component {
                                             className="clickable">{result.artist}</td>
                                         <td data-th="Spotify"><a href={result.openSpotify} target="_blank">Spotify</a>
                                         </td>
-                                       
+
                                     </tr>
                                 );
                             }
@@ -1115,7 +1174,7 @@ class Header extends React.Component {
                                             }
 
                                             <td data-th="Remove"><i className="material-icons heart"
-                                                    onClick={this.props.removeFavorite}>favorite</i>
+                                                                    onClick={this.props.removeFavorite}>favorite</i>
                                             </td>
                                         </tr>
                                     )}
@@ -1138,6 +1197,7 @@ class Header extends React.Component {
 //GLOBALS
 var AppComp = document.getElementById("App");
 var stopSong; //setTimeout
+var messageExists; //setTimeout
 //=======================================================
 //MAIN
 
