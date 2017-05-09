@@ -423,7 +423,7 @@ class App extends React.Component {
             this.state.playing.pause();
             this.setState({
                 playingSong: ''
-            })
+            });
         }
 
         let searchType = this.state.radioVal;
@@ -622,7 +622,7 @@ class App extends React.Component {
         this.setState({playing: audio, isPlaying: true, playingSong: url});
         audio.play();
         stopSong = setTimeout(() => {
-            this.setState({playingSong: ''})
+            this.setState({playingSong: ''});
         }, 30000);
     }
 
