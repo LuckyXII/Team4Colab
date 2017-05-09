@@ -409,7 +409,13 @@ class App extends React.Component {
     }
 
     //FINDRESULTS
-    findResults() {
+    findResults(event) {
+        if (event !== undefined) {
+            if (event.target.previousSibling.value.length === 0) {
+                event.preventDefault();
+                return;
+            }
+        }
 
         let searchType = this.state.radioVal;
         let title = "";
@@ -512,8 +518,17 @@ class App extends React.Component {
 
     //SEARCH INPUT
     searchInput(e) {
-        let val = e.target.value;
-        this.setState({searchVal: val});
+        if (e.key === 'Enter') {
+            if (e.target.value.length === 0) {
+                e.preventDefault();
+
+            } else {
+                this.findResults();
+            }
+        } else {
+            let val = e.target.value;
+            this.setState({searchVal: val});
+        }
     }
 
     //SEARCHTYPE
@@ -655,7 +670,7 @@ class App extends React.Component {
                     </form>
                     <div className="search-field-container">
                         {/*<!-- SEARCH INPUT -->*/}
-                        <input onChange={this.searchInput} type="text" id="main-search" placeholder="Search"
+                        <input onChange={this.searchInput} onKeyUp={this.searchInput} type="text" id="main-search" placeholder="Search"
                                value={this.state.searchVal}/>
                         <i onClick={this.findResults} id="searchBtn" className="material-icons">search</i>
                         {/*<!--<button type="button" className="btn">Search</button>-->*/}

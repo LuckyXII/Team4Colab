@@ -330,7 +330,7 @@ RESULT-BOX + LYRICS + BIO
 }
 
 .albumTracks > .relative > ul > li {
-    padding: 3px 5px 3px 5px;
+    padding: 5px 0 0 0;
 }
 
 .albumTracks > h2, h3 {
@@ -537,22 +537,21 @@ th > i {
     cursor: pointer;
 }
 
-
-::-webkit-scrollbar {
+.table-container::-webkit-scrollbar {
     width: 8px;
     margin: 0 0 0 5px;
 }
 
-::-webkit-scrollbar-track {
+.table-container::-webkit-scrollbar-track {
     background-color: #f7f7f8;
 }
 
-::-webkit-scrollbar-thumb {
+.table-container::-webkit-scrollbar-thumb {
     background-color: rgba(153, 106, 142, 0.8);
     border-radius: 5px;
 }
 
-::-webkit-scrollbar-corner {
+.table-container::-webkit-scrollbar-corner {
     background-color: #f7f7f8;
 }
 
