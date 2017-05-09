@@ -104,7 +104,7 @@ class App extends React.Component {
                 let similarNames = [];
 
                 for (let x = 0; x < similar.length; x++) {
-                    similarNames.push(similar[x].name);
+                    similarNames.push({name: similar[x].name, url: similar[x].url});
                 }
 
                 this.setState({
@@ -293,7 +293,6 @@ class App extends React.Component {
         let _this = this;
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
-                // User is signed in.
                 _this.setState({
                     loggedIn: true,
                     user: {
@@ -302,7 +301,6 @@ class App extends React.Component {
                         uid: user.uid
                     }
                 });
-                // ...
             } else {
                 // User is signed out.
                 // ...
@@ -409,7 +407,13 @@ class App extends React.Component {
     }
 
     //FINDRESULTS
-    findResults() {
+    findResults(event) {
+        if (event !== undefined) {
+            if (event.target.previousSibling.value.length === 0) {
+                event.preventDefault();
+                return;
+            }
+        }
 
         let searchType = this.state.radioVal;
         let title = "";
@@ -512,8 +516,17 @@ class App extends React.Component {
 
     //SEARCH INPUT
     searchInput(e) {
-        let val = e.target.value;
-        this.setState({searchVal: val});
+        if (e.key === 'Enter') {
+            if (e.target.value.length === 0) {
+                e.preventDefault();
+
+            } else {
+                this.findResults();
+            }
+        } else {
+            let val = e.target.value;
+            this.setState({searchVal: val});
+        }
     }
 
     //SEARCHTYPE
@@ -655,7 +668,7 @@ class App extends React.Component {
                     </form>
                     <div className="search-field-container">
                         {/*<!-- SEARCH INPUT -->*/}
-                        <input onChange={this.searchInput} type="text" id="main-search" placeholder="Search"
+                        <input onChange={this.searchInput} onKeyUp={this.searchInput} type="text" id="main-search" placeholder="Search"
                                value={this.state.searchVal}/>
                         <i onClick={this.findResults} id="searchBtn" className="material-icons">search</i>
                         {/*<!--<button type="button" className="btn">Search</button>-->*/}
@@ -796,9 +809,9 @@ class Bio extends React.Component {
                         <p>
                         {this.props.similar.map((artist, index) => {
                             if (index === this.props.similar.length - 1) {
-                                return (<span key={index}>{artist}</span>);
+                                return (<a href={artist.url} target="_blank" className="similar-artist" key={index}>{artist.name}</a>);
                             } else {
-                                return (<span key={index}>{artist}, </span>);
+                                return (<a href={artist.url} target="_blank" className="similar-artist" key={index}>{artist.name}, </a>);
                             }
                         }
                         )}
