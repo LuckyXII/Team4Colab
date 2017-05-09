@@ -31,7 +31,8 @@ class App extends React.Component {
             toggleProfile: false,
             bioDisplay: false,
             searchDisplay: false,
-            albumDisplay: false
+            albumDisplay: false,
+            playingSong: ''
         };
 
         this.handleLogIn = this.handleLogIn.bind(this);
@@ -415,6 +416,16 @@ class App extends React.Component {
             }
         }
 
+        if (stopSong !== undefined) {
+            clearTimeout(stopSong);
+        }
+        if (this.state.playing !== undefined && this.state.playing !== null) {
+            this.state.playing.pause();
+            this.setState({
+                playingSong: ''
+            })
+        }
+
         let searchType = this.state.radioVal;
         let title = "";
         let artist = "";
@@ -581,6 +592,10 @@ class App extends React.Component {
 
     //PLAY PREVIEW
     spotifyPreview(e) {
+        if (stopSong !== undefined) {
+            clearTimeout(stopSong);
+        }
+        let target = e.target;
         let playing = this.state.playing;
         let stop = document.getElementsByClassName("stop");
         if (playing !== undefined && playing !== null) {
@@ -588,6 +603,7 @@ class App extends React.Component {
         }
 
         //reset if song changes
+        /*
         if (stop !== undefined) {
             for (let i = 0; i < stop.length; i++) {
                 if (stop[i].className !== "hidden") {
@@ -597,23 +613,27 @@ class App extends React.Component {
             }
         }
 
-        e.target.className = "hidden";
-        e.target.nextSibling.className = "clickable";
-        let url = e.target.attributes[1].value;
+        target.className = "hidden";
+        target.nextSibling.className = "clickable";
+        */
+        let url = e.target.attributes['data-preview'].value;
         let audio = document.createElement("audio");
         audio.src = url;
-        this.setState({playing: audio, isPlaying: true});
+        this.setState({playing: audio, isPlaying: true, playingSong: url});
         audio.play();
-
+        stopSong = setTimeout(() => {
+            this.setState({playingSong: ''})
+        }, 30000);
     }
 
     //STOP PLAYING
     stopPreview(e) {
+        /*
         e.target.parentNode.previousSibling.className = "clickable";
         e.target.parentNode.className = "hidden";
-
+*/
         this.state.playing.pause();
-        this.setState({isPlaying: false});
+        this.setState({isPlaying: false, playingSong: ''});
     }
 
     closeBio() {
@@ -651,6 +671,7 @@ class App extends React.Component {
                     mobileAction={this.state.toggleProfile}
                     preview={this.spotifyPreview}
                     stopPreview={this.stopPreview}
+                    songPlaying={this.state.playingSong}
                 />
                 {/*<!-- SEARCH CONTAINER -->*/}
                 <div className="search-container">
@@ -717,6 +738,7 @@ class App extends React.Component {
                                         loginStatus={this.state.loggedIn}
                                         isPlaying={this.state.isPlaying}
                                         stopPreview={this.stopPreview}
+                                        songPlaying={this.state.playingSong}
                                     />
                                     {/*QOUTE OF THE DAY*/}
                                     <Quote title={this.state.quoteTitle} quote={this.state.quote}
@@ -886,21 +908,35 @@ class SearchResults extends React.Component {
                                             onClick={this.props.getAlbum}>{result.album}</td>
                                         <td data-th="Spotify" data-link={result.openSpotify} className="clickable"><a
                                             href={result.openSpotify} target="_blank">Spotify</a></td>
-                                        <td data-th="Preview" onClick={this.props.preview}
-                                            data-preview={result.preview} className="clickable">
-                                            Preview
-                                        </td>
-                                        {window.innerWidth > 768 &&
-                                        <td className="hidden" style={{textAlign: 'center'}} data-th="Spotify"><i
+
+                                        {this.props.songPlaying === result.preview && window.innerWidth > 768 &&
+                                        <td style={{textAlign: 'center'}} data-th="Preview"><i
                                             onClick={this.props.stopPreview}
                                             className="material-icons stop">stop</i>
                                         </td>
                                         }
-                                        {window.innerWidth < 768 &&
-                                        <td className="hidden" data-th="Spotify"><i
+
+                                        {this.props.songPlaying !== result.preview && window.innerWidth > 768 &&
+                                        <td data-th="Preview" onClick={this.props.preview}
+                                            data-preview={result.preview} className="clickable">
+                                            Preview
+                                        </td>
+                                        }
+
+                                        {this.props.songPlaying === result.preview && window.innerWidth < 768 &&
+                                        <td data-th="Preview"><i
                                             onClick={this.props.stopPreview}
                                             className="material-icons stop">stop</i>
-                                        </td>}
+                                        </td>
+                                        }
+
+                                        {this.props.songPlaying !== result.preview && window.innerWidth < 768 &&
+                                            <td data-th="Preview" onClick={this.props.preview}
+                                            data-preview={result.preview} className="clickable">
+                                            Preview
+                                            </td>
+                                        }
+
                                         {this.props.loginStatus &&
                                         <td data-th="Favorite"><i onClick={this.props.sendFav}
                                                                   className="material-icons">favorite</i></td>
@@ -1040,21 +1076,34 @@ class Header extends React.Component {
                                                                                            target="_blank">Spotify</a>
                                             </td>
 
-                                            <td data-th="Preview" data-link={favorite.preview} className="clickable"
-                                                onClick={this.props.preview}>Preview
-                                            </td>
-                                            {window.innerWidth > 768 &&
-                                            <td className="hidden" data-th="Preview" style={{textAlign: 'center'}}><i
+                                            {this.props.songPlaying === favorite.preview && window.innerWidth > 768 &&
+                                            <td style={{textAlign: 'center'}} data-th="Preview"><i
                                                 onClick={this.props.stopPreview}
                                                 className="material-icons stop">stop</i>
                                             </td>
                                             }
-                                            {window.innerWidth < 768 &&
-                                            <td className="hidden" data-th="Preview"><i
+
+                                            {this.props.songPlaying !== favorite.preview && window.innerWidth > 768 &&
+                                            <td data-th="Preview" onClick={this.props.preview}
+                                                data-preview={favorite.preview} className="clickable">
+                                                Preview
+                                            </td>
+                                            }
+
+                                            {this.props.songPlaying === favorite.preview && window.innerWidth < 768 &&
+                                            <td data-th="Preview"><i
                                                 onClick={this.props.stopPreview}
                                                 className="material-icons stop">stop</i>
                                             </td>
                                             }
+
+                                            {this.props.songPlaying !== favorite.preview && window.innerWidth < 768 &&
+                                            <td data-th="Preview" onClick={this.props.preview}
+                                                data-preview={favorite.preview} className="clickable">
+                                                Preview
+                                            </td>
+                                            }
+
                                             <td data-th="Remove"><i className="material-icons"
                                                                     onClick={this.props.removeFavorite}>favorite</i>
                                             </td>
@@ -1079,7 +1128,7 @@ class Header extends React.Component {
 //GLOBALS
 var AppComp = document.getElementById("App");
 const radioBtns = document.getElementsByClassName("radio-btn");
-
+var stopSong;
 //=======================================================
 //MAIN
 
