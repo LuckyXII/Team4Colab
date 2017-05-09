@@ -376,6 +376,10 @@ RESULT-BOX + LYRICS + BIO
     font-size: .9em;
 }
 
+.biography > .relative > div > p > .similar-artist {
+    display: inline;
+}
+
 .relative {
     position: relative;
 }
@@ -393,6 +397,18 @@ RESULT-BOX + LYRICS + BIO
     text-decoration: none;
     font-weight: 600;
     color: #996A8E;
+}
+
+a {
+    transition: all .3s;
+}
+
+.biography > .relative > div > p > a:hover {
+    color: #563c50;
+}
+
+.biography > .relative > div > p > .similar-artist:hover {
+    color: #563c50;
 }
 
 li > span {

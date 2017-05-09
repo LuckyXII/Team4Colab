@@ -104,7 +104,7 @@ class App extends React.Component {
                 let similarNames = [];
 
                 for (let x = 0; x < similar.length; x++) {
-                    similarNames.push(similar[x].name);
+                    similarNames.push({name: similar[x].name, url: similar[x].url});
                 }
 
                 this.setState({
@@ -293,7 +293,6 @@ class App extends React.Component {
         let _this = this;
         firebase.auth().onAuthStateChanged(user => {
             if (user) {
-                // User is signed in.
                 _this.setState({
                     loggedIn: true,
                     user: {
@@ -302,7 +301,6 @@ class App extends React.Component {
                         uid: user.uid
                     }
                 });
-                // ...
             } else {
                 // User is signed out.
                 // ...
@@ -811,9 +809,9 @@ class Bio extends React.Component {
                         <p>
                         {this.props.similar.map((artist, index) => {
                             if (index === this.props.similar.length - 1) {
-                                return (<span key={index}>{artist}</span>)
+                                return (<a href={artist.url} target="_blank" className="similar-artist" key={index}>{artist.name}</a>)
                             } else {
-                                return (<span key={index}>{artist}, </span>)
+                                return (<a href={artist.url} target="_blank" className="similar-artist" key={index}>{artist.name}, </a>)
                             }
                         }
                         )}

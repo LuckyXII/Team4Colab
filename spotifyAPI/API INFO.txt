@@ -1,2 +1,0 @@
-base URL: https://api.spotify.com
-Client ID: b56a591a080245bda2fc43ef9b274f9f
