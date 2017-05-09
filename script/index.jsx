@@ -73,10 +73,10 @@ class App extends React.Component {
                     uid: user.uid
                 }
             });
-            this.statusChange('success', 'You successfully logged in!')
+            this.statusChange('success', 'You successfully logged in!');
         }).catch(error => {
             console.log(error);
-            this.statusChange('error', 'Something went wrong, try again.')
+            this.statusChange('error', 'Something went wrong, try again.');
         });
     }
 
@@ -85,10 +85,10 @@ class App extends React.Component {
             this.setState({
                 loggedIn: false
             });
-            this.statusChange('success', 'You successfully logged out!')
+            this.statusChange('success', 'You successfully logged out!');
         }).catch(error => {
             console.log(error);
-            this.statusChange('error', 'Something went wrong, try again.')
+            this.statusChange('error', 'Something went wrong, try again.');
         });
     }
 
@@ -175,10 +175,10 @@ class App extends React.Component {
             });
 
             this.setState({addSucess: true});
-            this.statusChange('success', 'Your song was added to your favorites.')
+            this.statusChange('success', 'Your song was added to your favorites.');
         } else {
             this.setState({addSucess: false});
-            this.statusChange('error', 'You already have this song in your favorites.')
+            this.statusChange('error', 'You already have this song in your favorites.');
         }
 
     }
@@ -224,7 +224,7 @@ class App extends React.Component {
         let targetId = event.target.parentNode.parentNode.attributes['data-id'].value;
         const database = firebase.database();
         database.ref('users/' + this.state.user.uid + '/favorites/' + targetId).set(null);
-        this.statusChange('success', 'Your song was removed from your favorites.')
+        this.statusChange('success', 'Your song was removed from your favorites.');
     }
 
     //FILTER FAVORITES
@@ -698,7 +698,7 @@ class App extends React.Component {
 
     statusChange(status, message) {
         if (messageExists !== undefined) {
-            clearTimeout(messageExists)
+            clearTimeout(messageExists);
         }
 
         this.setState({
@@ -711,7 +711,7 @@ class App extends React.Component {
                 statusCode: '',
                 statusMessage: ''
             });
-        }, 3000)
+        }, 3000);
     }
 
     //RENDER
