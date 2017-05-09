@@ -1,4 +1,7 @@
 * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
 }
 
@@ -14,6 +17,9 @@ h1 {
     color: #FEFEFD;
     font-weight: 600;
     font-size: 2em;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
 }
 
@@ -79,6 +85,9 @@ ul {
 }
 
 label {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
     margin-right: 5px;
     margin-left: 10px;
@@ -276,6 +285,8 @@ SUGGESTIONS
 RESULT-BOX + LYRICS + BIO
  */
 
+
+
 .absolute {
     position: absolute;
     right: 0;
@@ -400,6 +411,7 @@ RESULT-BOX + LYRICS + BIO
 }
 
 a {
+    -webkit-transition: all .3s;
     transition: all .3s;
 }
 
@@ -484,6 +496,7 @@ TABLE-TEST
 
 .clickable {
     cursor: pointer;
+    -webkit-transition: all .3s;
     transition: all .3s;
 }
 
@@ -504,6 +517,7 @@ table {
 td > a {
     text-decoration: none;
     color: #996A8E;
+    -webkit-transition: all .3s;
     transition: all .3s;
 }
 
@@ -514,6 +528,7 @@ td > a:hover {
 th {
     font-weight: 500;
     cursor: pointer;
+    -webkit-transition: all .3s;
     transition: all .3s;
 }
 
@@ -539,6 +554,7 @@ td > i {
     vertical-align: middle;
     padding: 0 8px 3px 0;
     cursor: pointer;
+    -webkit-transition: all .3s;
     transition: all .3s;
 }
 

@@ -132,8 +132,6 @@ class App extends React.Component {
         let uid = this.state.user.uid;
         const database = firebase.database();
 
-        //console.log(this.state.originalFavorites);
-
         this.state.originalFavorites.map(song => {
             if (track === song.track && artist === song.artist && album === song.album) {
                 duplicate = true;
@@ -148,6 +146,10 @@ class App extends React.Component {
                 spotify: spotify,
                 preview: preview
             });
+            
+            this.setState({addSucess: true});
+        }else{
+            this.setState({addSucess:false});
         }
 
     }
@@ -635,20 +637,6 @@ class App extends React.Component {
             playing.pause();
         }
 
-        //reset if song changes
-        /*
-         if (stop !== undefined) {
-         for (let i = 0; i < stop.length; i++) {
-         if (stop[i].className !== "hidden") {
-         stop[i].parentNode.previousSibling.className = "clickable";
-         stop[i].parentNode.className = "hidden";
-         }
-         }
-         }
-
-         target.className = "hidden";
-         target.nextSibling.className = "clickable";
-         */
         let url = e.target.attributes['data-preview'].value;
         let audio = document.createElement("audio");
         audio.src = url;
@@ -661,10 +649,6 @@ class App extends React.Component {
 
     //STOP PLAYING
     stopPreview(e) {
-        /*
-         e.target.parentNode.previousSibling.className = "clickable";
-         e.target.parentNode.className = "hidden";
-         */
         this.state.playing.pause();
         this.setState({isPlaying: false, playingSong: ''});
     }
@@ -726,16 +710,6 @@ class App extends React.Component {
                                placeholder="Search"
                                value={this.state.searchVal}/>
                         <i onClick={this.findResults} id="searchBtn" className="material-icons">search</i>
-                        {/*<!--<button type="button" className="btn">Search</button>-->*/}
-                        {/*<div className="suggestions">
-                         <ul>
-                         <li>Resultat 1</li>
-                         <li>Resultat 2</li>
-                         <li>Resultat 3</li>
-                         <li>Resultat 4</li>
-                         <li>Resultat 5</li>
-                         </ul>
-                         </div>*/}
                     </div>
                     {/* <!-- Boxen som visas när man har sökt -->*/}
                     <div className="results-container">
@@ -975,7 +949,7 @@ class SearchResults extends React.Component {
 
                                         {this.props.loginStatus &&
                                         <td data-th="Favorite"><i onClick={this.props.sendFav}
-                                                                  className="material-icons">favorite</i></td>
+                                                                  className="material-icons heart">favorite</i></td>
                                         }
                                     </tr>
                                 );
@@ -991,7 +965,7 @@ class SearchResults extends React.Component {
                                             className="clickable">{result.album}</td>
                                         <td data-th="Spotify"><a href={result.openSpotify} target="_blank">Spotify</a>
                                         </td>
-                                        {/*<td data-th="Spotify" onClick={this.props.preview}>spotify</td>*/}
+                                       
                                     </tr>
                                 );
                             }
@@ -1005,7 +979,7 @@ class SearchResults extends React.Component {
                                             className="clickable">{result.artist}</td>
                                         <td data-th="Spotify"><a href={result.openSpotify} target="_blank">Spotify</a>
                                         </td>
-                                        {/*<td data-th="Spotify" onClick={this.props.preview}>spotify</td>*/}
+                                       
                                     </tr>
                                 );
                             }
@@ -1108,8 +1082,8 @@ class Header extends React.Component {
                                                 className="clickable">{favorite.artist}</td>
                                             <td data-th="Album" onClick={this.props.getAlbum}
                                                 className="clickable">{favorite.album}</td>
-                                            <td data-th="Spotify" className="clickable"><a href={favorite.spotify}
-                                                                                           target="_blank">Spotify</a>
+                                            <td data-th="Spotify" className="clickable">
+                                                <a href={favorite.spotify} target="_blank">Spotify</a>
                                             </td>
 
                                             {this.props.songPlaying === favorite.preview && window.innerWidth > 768 &&
@@ -1140,8 +1114,8 @@ class Header extends React.Component {
                                             </td>
                                             }
 
-                                            <td data-th="Remove"><i className="material-icons"
-                                                                    onClick={this.props.removeFavorite}>favorite</i>
+                                            <td data-th="Remove"><i className="material-icons heart"
+                                                    onClick={this.props.removeFavorite}>favorite</i>
                                             </td>
                                         </tr>
                                     )}
@@ -1163,15 +1137,8 @@ class Header extends React.Component {
 //=======================================================
 //GLOBALS
 var AppComp = document.getElementById("App");
-const radioBtns = document.getElementsByClassName("radio-btn");
-var stopSong;
+var stopSong; //setTimeout
 //=======================================================
 //MAIN
 
 ReactDOM.render(<App/>, AppComp);
-
-//=======================================================
-//CALLBACKS
-
-//=======================================================
-//FUNCTIONS
