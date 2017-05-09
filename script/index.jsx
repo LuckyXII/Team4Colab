@@ -127,17 +127,28 @@ class App extends React.Component {
         let album = par.children[2].textContent;
         let spotify = par.children[3].attributes['data-link'].value;
         let preview = par.children[4].attributes['data-preview'].value;
+        let duplicate = false;
 
         let uid = this.state.user.uid;
         const database = firebase.database();
 
-        database.ref('users/' + uid + '/favorites/').push({
-            track: track,
-            album: album,
-            artist: artist,
-            spotify: spotify,
-            preview: preview
+        //console.log(this.state.originalFavorites);
+
+        this.state.originalFavorites.map(song => {
+            if (track === song.track && artist === song.artist && album === song.album) {
+                duplicate = true;
+            }
         });
+
+        if (!duplicate) {
+            database.ref('users/' + uid + '/favorites/').push({
+                track: track,
+                album: album,
+                artist: artist,
+                spotify: spotify,
+                preview: preview
+            });
+        }
 
     }
 
@@ -301,6 +312,28 @@ class App extends React.Component {
                         photo: user.photoURL,
                         uid: user.uid
                     }
+                });
+
+                //läs in data direkt så jag har något att jämföra emot om man inte öppnar favoriter först
+                const database = firebase.database();
+                database.ref('users/' + this.state.user.uid + '/favorites/').once('value', snapshot => {
+                    let data = snapshot.val();
+                    let allFavorites = [];
+                    for (let favorite in data) {
+                        allFavorites.push({
+                            track: data[favorite].track,
+                            album: data[favorite].album,
+                            artist: data[favorite].artist,
+                            spotify: data[favorite].spotify,
+                            preview: data[favorite].preview,
+                            id: favorite
+                        });
+                    }
+
+                    this.setState({
+                        favorites: allFavorites,
+                        originalFavorites: allFavorites
+                    });
                 });
             } else {
                 // User is signed out.
@@ -604,18 +637,18 @@ class App extends React.Component {
 
         //reset if song changes
         /*
-        if (stop !== undefined) {
-            for (let i = 0; i < stop.length; i++) {
-                if (stop[i].className !== "hidden") {
-                    stop[i].parentNode.previousSibling.className = "clickable";
-                    stop[i].parentNode.className = "hidden";
-                }
-            }
-        }
+         if (stop !== undefined) {
+         for (let i = 0; i < stop.length; i++) {
+         if (stop[i].className !== "hidden") {
+         stop[i].parentNode.previousSibling.className = "clickable";
+         stop[i].parentNode.className = "hidden";
+         }
+         }
+         }
 
-        target.className = "hidden";
-        target.nextSibling.className = "clickable";
-        */
+         target.className = "hidden";
+         target.nextSibling.className = "clickable";
+         */
         let url = e.target.attributes['data-preview'].value;
         let audio = document.createElement("audio");
         audio.src = url;
@@ -629,9 +662,9 @@ class App extends React.Component {
     //STOP PLAYING
     stopPreview(e) {
         /*
-        e.target.parentNode.previousSibling.className = "clickable";
-        e.target.parentNode.className = "hidden";
-*/
+         e.target.parentNode.previousSibling.className = "clickable";
+         e.target.parentNode.className = "hidden";
+         */
         this.state.playing.pause();
         this.setState({isPlaying: false, playingSong: ''});
     }
@@ -689,7 +722,8 @@ class App extends React.Component {
                     </form>
                     <div className="search-field-container">
                         {/*<!-- SEARCH INPUT -->*/}
-                        <input onChange={this.searchInput} onKeyUp={this.searchInput} type="text" id="main-search" placeholder="Search"
+                        <input onChange={this.searchInput} onKeyUp={this.searchInput} type="text" id="main-search"
+                               placeholder="Search"
                                value={this.state.searchVal}/>
                         <i onClick={this.findResults} id="searchBtn" className="material-icons">search</i>
                         {/*<!--<button type="button" className="btn">Search</button>-->*/}
@@ -772,18 +806,18 @@ class AlbumTracks extends React.Component {
         return (
             <div className="albumTracks">
                 <div className="relative">
-                <i className="material-icons absolute clickable" onClick={this.props.closeAlbum}>close</i>
-                <img src={this.props.album.cover} alt="cover" className="album-image"/>
-                <h2>{this.props.album.artist}</h2>
-                <h3>{this.props.album.albumName}</h3>
-                <ul>
-                    {this.props.album.albumTracks.map((track, index) => {
-                        return (
-                            <li key={index}>{track}</li>
-                        );
-                    })}
-                </ul>
-                <img className="lastFM" src="./rescources/lastfm_black_small.gif" alt="lastFM"/>
+                    <i className="material-icons absolute clickable" onClick={this.props.closeAlbum}>close</i>
+                    <img src={this.props.album.cover} alt="cover" className="album-image"/>
+                    <h2>{this.props.album.artist}</h2>
+                    <h3>{this.props.album.albumName}</h3>
+                    <ul>
+                        {this.props.album.albumTracks.map((track, index) => {
+                            return (
+                                <li key={index}>{track}</li>
+                            );
+                        })}
+                    </ul>
+                    <img className="lastFM" src="./rescources/lastfm_black_small.gif" alt="lastFM"/>
                 </div>
             </div>
         );
@@ -829,14 +863,16 @@ class Bio extends React.Component {
                     <div>
                         <h3>Similar Artists:</h3>
                         <p>
-                        {this.props.similar.map((artist, index) => {
-                            if (index === this.props.similar.length - 1) {
-                                return (<a href={artist.url} target="_blank" className="similar-artist" key={index}>{artist.name}</a>);
-                            } else {
-                                return (<a href={artist.url} target="_blank" className="similar-artist" key={index}>{artist.name}, </a>);
-                            }
-                        }
-                        )}
+                            {this.props.similar.map((artist, index) => {
+                                    if (index === this.props.similar.length - 1) {
+                                        return (<a href={artist.url} target="_blank" className="similar-artist"
+                                                   key={index}>{artist.name}</a>);
+                                    } else {
+                                        return (<a href={artist.url} target="_blank" className="similar-artist"
+                                                   key={index}>{artist.name}, </a>);
+                                    }
+                                }
+                            )}
                         </p>
                         <h3>Band Biography</h3>
                         <p dangerouslySetInnerHTML={{__html: this.props.summary}}></p>
@@ -931,10 +967,10 @@ class SearchResults extends React.Component {
                                         }
 
                                         {this.props.songPlaying !== result.preview && window.innerWidth < 768 &&
-                                            <td data-th="Preview" onClick={this.props.preview}
+                                        <td data-th="Preview" onClick={this.props.preview}
                                             data-preview={result.preview} className="clickable">
                                             Preview
-                                            </td>
+                                        </td>
                                         }
 
                                         {this.props.loginStatus &&
